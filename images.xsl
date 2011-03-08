@@ -5,7 +5,7 @@
 <!--
 	RESIZE IMAGES
 	by Nils Hörrmann, http://www.nilshoerrmann.de
-	Version 1.0.1, 22nd February 2010
+	Version 1.1, 8th March 2011
 	
 	# Example usage:
 	
