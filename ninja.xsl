@@ -41,7 +41,7 @@
 	HEADLINES
 	Adjust hierarchy 
 -->
-<xsl:template match="h2 | h3 | h4" mode="ninja" priority="1">
+<xsl:template match="h1 | h2 | h3 | h4" mode="ninja" priority="1">
 
 	<!-- Get level -->
 	<xsl:param name="level" select="0" />
