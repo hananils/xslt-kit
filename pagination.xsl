@@ -116,11 +116,13 @@
 			<!-- Previous link -->
 			<xsl:if test="$show-navigation = true()">
 				<li>
-					<xsl:if test="$page-next = 2">
-						<xsl:attribute name="class">
+					<xsl:attribute name="class">
+						<xsl:text>next</xsl:text>
+						<xsl:if test="$page-next = 2">
+							<xsl:text> </xsl:text>
 							<xsl:value-of select="$class-disabled" />
-						</xsl:attribute>
-					</xsl:if>
+						</xsl:if>
+					</xsl:attribute>
 					<a class="{$class-previous}">
 						<xsl:if test="$page-next != 2 or $show-rotation = true()">
 							<xsl:attribute name="href">
@@ -152,11 +154,13 @@
 			<!-- Next link -->
 			<xsl:if test="$show-navigation = true()">
 				<li>
-					<xsl:if test="$page-next = 1">
-						<xsl:attribute name="class">
+					<xsl:attribute name="class">
+						<xsl:text>previous</xsl:text>
+						<xsl:if test="$page-next = 1">
+							<xsl:text> </xsl:text>
 							<xsl:value-of select="$class-disabled" />
-						</xsl:attribute>
-					</xsl:if>
+						</xsl:if>
+					</xsl:attribute>
 					<a class="{$class-next}">
 						<xsl:if test="$page-next != 1 or $show-rotation = true()">
 							<xsl:attribute name="href">
