@@ -37,6 +37,7 @@
 	timezone:          Takes a timezone offset, e. g. '+0200', defaults to $date/@offset
 
 	A backslash used in date formats escapes the following character.
+	An underscore represents a non-breakable space.
 	For month names and weekdays a special data source, data.datetime.php, is needed. 
 -->
 
@@ -189,6 +190,9 @@
 				<xsl:with-param name="format" select="$letter" />
 				<xsl:with-param name="lang" select="$lang" />
 			</xsl:call-template>
+		</xsl:when>
+		<xsl:when test="$tletter = '_'">
+			<xsl:text>&#160;</xsl:text>
 		</xsl:when>
 		<xsl:when test="$tletter = '\'">
 			<xsl:value-of select="substring($format, 2, 1)" />
