@@ -15,7 +15,7 @@
 	
 	# Options
 	
-	- level             a number to adjust the headline hierarchy, defaults to 0
+	- level             A number to adjust the headline hierarchy, defaults to 0
 	
 	# Change log
 	

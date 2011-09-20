@@ -20,21 +20,21 @@
 							
 	# Options
 	
-	- image:             a Symphony image node containing image path, 
+	- image:             A Symphony image node containing image path, 
 	                     filename and meta information
-	- mode:              resize mode, either nummeric or string
+	- mode:              Resize mode, either nummeric or string
 	                     - direct display: 0 or empty
 	                     - resize: 1 or 'resize'
 	                     - crop to fill: 2 or 'crop'
 	                     - resize canvas: 3 or 'resize-crop'
-	- width:             target width, nummeric
-	- height:            target height, nummeric
-	- position:          canvas position, nummeric
-	- background-color:  optional for mode 3, hex
-	- link:              link back to original image, either true() or false()	
-	- alt:               optional alternative text, string
-	- title:             optional title, string
-	- class:             optional class name, string
+	- width:             Target width, nummeric
+	- height:            Target height, nummeric
+	- position:          Canvas position, nummeric
+	- background-color:  Optional for mode 3, hex
+	- link:              Link back to original image, either true() or false()	
+	- alt:               Optional alternative text, string
+	- title:             Optional title, string
+	- class:             Optional class name, string
 	
 	# Notes
 	
