@@ -96,7 +96,13 @@
 <!--
 	LIST OF NAMES
 	
-	Expects multiple
+	# Options
+	
+	- persons            Multiple person nodes, see "name" template                  
+	- title              show title, defaults to `false()`
+	- nn                 Value returned if none of the above values is provide, defaults to "N.N."
+	- connector          characters used to join names, defaults to `, `
+	- last               connector used to add the last name, defaults to ` and `
 -->
 <xsl:template name="names">
 	<xsl:param name="persons" />
