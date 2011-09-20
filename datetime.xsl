@@ -3,42 +3,66 @@
 
 <!--
 	DATE AND TIME
-	A utility by Nils Hörrmann <http://nilshoerrmann.de>
-	based on Allen Chang's date and time utility for Symphony, http://symphony-cms.com/download/xslt-utilities/view/20506/
+	
+	- Author: Nils Hörrmann <http://nilshoerrmann.de> based on a utility by Allen Chang <http://chaoticpattern.com>
+	- See: <http://symphony-cms.com/download/xslt-utilities/view/20506/>
+	- Version: 1.1
+	- Release date: 20th September 2011
+	
+	# Example usage
+	
+		<xsl:call-template name="format-date">
+			<xsl:with-param name="date" select="date" />
+		</xsl:call-template>	
 	
 	# Required Parameters:
 
-	date:              Takes an ISO date (2005-12-01)
+	- date:              Expects a Symphony date node (as provided by the core date field or the Date and Time extension)
 	
 	# Optional Parameters:
 	
-	time:              Takes an time string (12:30), defaults to $date/@time
-	weekday:           Takes a number (monday = 1, tuesday = 2 ...), defaults to $date/@weekday
-	format:            Takes a format string with the following options:
+	- time:              Takes an time string (12:30), defaults to $date/@time
+	- weekday:           Takes a number (monday = 1, tuesday = 2 ...), defaults to $date/@weekday
+	- format:            Takes a format string with the following options:
 	
-	                   Y: Year in 4 digits, e. g. 1981, 1992, 2008
-	                   y: Year in 2 digits, e. g. 81, 92, 08
-	                   M: Month as a full word, e. g. January, March, September
-	                   m: Month in 3 letters, e. g. Jan, Mar, Sep
-	                   N: Month in digits without leading zero
-	                   n: Month in digits with leading zero
-	                   D: Day with suffix and no leading zero, e. g. 1st, 23rd
-	                   d: Day in digits with leading zero, e. g. 01, 09, 12, 25
-	                   x: Day in digits with no leading zero, e. g. 1, 9, 12, 25
-	                   T: Time in 24-hours, e. g. 18:30
-	                   h: Time in 24-hours with no leading zero, e. g. 4:25
-	                   t: Time in 12-hours, e. g. 6:30pm
-	                   W: Weekday as a full word, e. g. Monday, Tuesday
-	                   w: Weekday in 3 letters, e. g. Mon, Tue, Wed
-	                   rfc2822: RFC 2822 formatted date
-	                   iso8601: ISO 8601 formatted date
+	                     Y: Year in 4 digits, e. g. 1981, 1992, 2008
+	                     y: Year in 2 digits, e. g. 81, 92, 08
+	                     M: Month as a full word, e. g. January, March, September
+	                     m: Month in 3 letters, e. g. Jan, Mar, Sep
+	                     N: Month in digits without leading zero
+	                     n: Month in digits with leading zero
+	                     D: Day with suffix and no leading zero, e. g. 1st, 23rd
+	                     d: Day in digits with leading zero, e. g. 01, 09, 12, 25
+	                     x: Day in digits with no leading zero, e. g. 1, 9, 12, 25
+	                     T: Time in 24-hours, e. g. 18:30
+	                     h: Time in 24-hours with no leading zero, e. g. 4:25
+	                     t: Time in 12-hours, e. g. 6:30pm
+	                     W: Weekday as a full word, e. g. Monday, Tuesday
+	                     w: Weekday in 3 letters, e. g. Mon, Tue, Wed
+	                     rfc2822: RFC 2822 formatted date
+	                     iso8601: ISO 8601 formatted date
 				
-	lang:              Takes a language name, e. g. 'en', 'de'
-	timezone:          Takes a timezone offset, e. g. '+0200', defaults to $date/@offset
+	- lang:              Takes a language name, e. g. 'en', 'de'
+	- timezone:          Takes a timezone offset, e. g. '+0200', defaults to $date/@offset
 
-	A backslash used in date formats escapes the following character.
-	An underscore represents a non-breakable space.
-	For month names and weekdays a special data source, data.datetime.php, is needed. 
+	# Special characters
+	
+	- A backslash used in date formats escapes the following character.
+	- An underscore represents a non-breakable space.
+	
+	# Month names and weekdays
+	
+	For month names and weekdays a special data source, data.datetime.php, is needed. It is bundled with the Date and Time extension, see: <https://github.com/nilshoerrmann/datetime/blob/master/data-sources/data.datetime.php>
+	
+	# Change log
+	
+	## Version 1.1
+	
+	- A few cosmetic updates
+	
+	## Version 1.0
+	
+	- Initial release
 -->
 
 <xsl:template name="format-date">
@@ -59,7 +83,6 @@
 </xsl:template>
 
 <!--
-	GERMAN VARIANT
 	German equivalent to the main format-date template	
 -->
 <xsl:template name="formatiere-datum">
@@ -80,8 +103,7 @@
 </xsl:template>
 
 <!--
-	DATE FORMATTER
-	Prepares date for formatting
+	Date formatter
 -->
 <xsl:template name="date-formatter">
 	<xsl:param name="date" />
@@ -127,8 +149,7 @@
 </xsl:template>
 
 <!--
-	DATE CONTROLLER
-	Executes date formatting
+	Date controller
 -->
 <xsl:template name="date-controller">
 	<xsl:param name="date" />
@@ -226,11 +247,11 @@
 	FORMAT YEAR
 	Returns the formatted year
 	
-	date:              Date, e. g. '2010-07-17'
-	format:            Format:
+	- date:              Date, e. g. '2010-07-17'
+	- format:            Format:
 	
-	                   y: Two digit representation of the year
-	                   Y: Full numeric representation of the year
+	                     y: Two digit representation of the year
+	                     Y: Full numeric representation of the year
 -->
 <xsl:template name="format-year">
 	<xsl:param name="date" />
@@ -251,15 +272,15 @@
 	FORMAT MONTH	
 	Returns the formatted month as string or number
 	
-	date:              Date, e. g. '2010-07-17'
-	format:            Format:
+	- date:              Date, e. g. '2010-07-17'
+	- format:            Format:
 	
-	                   m: Abbreviated name
-	                   M: Full name
-	                   n: Number with leading zero
-	                   N: Number without leading zero
+	                     m: Abbreviated name
+	                     M: Full name
+	                     n: Number with leading zero
+	                     N: Number without leading zero
 	                   
-	lang:              Language, e. g. 'en', 'de'
+	- lang:              Language, e. g. 'en', 'de'
 -->
 <xsl:template name="format-month">
 	<xsl:param name="date" />
@@ -288,12 +309,12 @@
 	FORMAT DAY
 	Returns the formatted day as number
 	
-	date:              Date, e. g. '2010-07-17'
-	format:            Format:
+	- date:              Date, e. g. '2010-07-17'
+	- format:            Format:
 	
-	                   d: Day number with leading zero
-	                   x: Day number without leading zero
-	                   D: Day number with suffix and without leading zero
+	                     d: Day number with leading zero
+	                     x: Day number without leading zero
+	                     D: Day number with suffix and without leading zero
 -->
 <xsl:template name="format-day">
 	<xsl:param name="date" />
@@ -324,12 +345,12 @@
 	FORMAT TIME
 	Returns the formatted time
 	
-	time:              Time, e. g. '17:59'
-	format:            Format:
+	- time:              Time, e. g. '17:59'
+	- format:            Format:
 	
-	                   T: Time in 24-hour format with leading zero
-	                   h: Time in 24-hour format without leading zero
-	                   t: Time in 12-hour format with lowercase ante meridiem and post meridiem
+	                     T: Time in 24-hour format with leading zero
+	                     h: Time in 24-hour format without leading zero
+	                     t: Time in 12-hour format with lowercase ante meridiem and post meridiem
 -->
 <xsl:template name="format-time">
 	<xsl:param name="time" />
@@ -368,11 +389,11 @@
 	FORMAT WEEKDAY
 	Returns the formatted weekday as string
 	
-	weekday:           Weekday as number, e. g. 1 (Monday), 2 (Tuesday), ...
-	format:            Format:
+	- weekday:           Weekday as number, e. g. 1 (Monday), 2 (Tuesday), ...
+	- format:            Format:
 	
-	                   w: Abbreviated weekday name
-	                   W: Weekday name
+	                     w: Abbreviated weekday name
+	                     W: Weekday name
 -->
 <xsl:template name="format-weekday">
 	<xsl:param name="weekday" />
@@ -395,10 +416,10 @@
 	Returns the formatted date as string using RFC2822 format
 	(e. g. Mon, 21 Sep 1981 18:30:00 +0100)
 	
-	date:              Date, e. g. 2010-07-17
-	time:              Time, e. g. 17:59
-	weekday:           Weekday, e. g. 0 (Sunday), 1 (Monday)
-	timezone:          Timezone
+	- date:              Date, e. g. 2010-07-17
+	- time:              Time, e. g. 17:59
+	- weekday:           Weekday, e. g. 0 (Sunday), 1 (Monday)
+	- timezone:          Timezone
 -->
 <xsl:template name="format-rfc2822">
 	<xsl:param name="date" />
@@ -420,9 +441,9 @@
 	Returns the formatted date as string using ISO8601 format
 	(e. g. 1981-09-21T18:30:00+01:00)
 	
-	date:              Date, e. g. 2010-07-17
-	time:              Time, e. g. 17:59
-	timezone:          Timezone
+	- date:              Date, e. g. 2010-07-17
+	- time:              Time, e. g. 17:59
+	- timezone:          Timezone
 -->
 <xsl:template name="format-iso8601">
 	<xsl:param name="date" />
