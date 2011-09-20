@@ -4,50 +4,64 @@
 
 <!--
 	RESIZE IMAGES
-	by Nils Hörrmann, http://www.nilshoerrmann.de
-	Version 1.1, 8th March 2011
 	
-	# Example usage:
+	- Author: Nils Hörrmann <http://nilshoerrmann.de>
+	- Version: 1.1
+	- Release date: 8th March 2011
 	
-	<xsl:call-template name="image" mode="jit">
-		<xsl:with-param name="image" select="image" />
-		<xsl:with-param name="mode" select="2" />
-		<xsl:with-param name="width" select="50" />
-		<xsl:with-param name="height" select="50" />
-		<xsl:with-param name="link" select="true()" />
-	</xsl:call-template>
+	# Example usage
+	
+		<xsl:call-template name="image" mode="jit">
+			<xsl:with-param name="image" select="image" />
+			<xsl:with-param name="mode" select="2" />
+			<xsl:with-param name="width" select="50" />
+			<xsl:with-param name="height" select="50" />
+			<xsl:with-param name="link" select="true()" />
+		</xsl:call-template>
 							
-	# Options:
+	# Options
 	
-	image:             a Symphony image node containing image path, 
-	                   filename and meta information
-	mode:              resize mode, either nummeric or string
-	                    - direct display: 0 or empty
-	                    - resize: 1 or 'resize'
-	                    - crop to fill: 2 or 'crop'
-	                    - resize canvas: 3 or 'resize-crop'
-	width:             target width, nummeric
-	height:            target height, nummeric
-	position:          canvas position, nummeric
-	background-color:  optional for mode 3, hex
-	link:              link back to original image, either true() or false()	
-	title:             optional title, string
-	class:             optional class name, string
+	- image:             a Symphony image node containing image path, 
+	                     filename and meta information
+	- mode:              resize mode, either nummeric or string
+	                     - direct display: 0 or empty
+	                     - resize: 1 or 'resize'
+	                     - crop to fill: 2 or 'crop'
+	                     - resize canvas: 3 or 'resize-crop'
+	- width:             target width, nummeric
+	- height:            target height, nummeric
+	- position:          canvas position, nummeric
+	- background-color:  optional for mode 3, hex
+	- link:              link back to original image, either true() or false()	
+	- alt:               optional alternative text, string
+	- title:             optional title, string
+	- class:             optional class name, string
 	
-	# Notes:
+	# Notes
 	
-	This template will add the original dimensions as image title, e. g.:
+	This template will add the original dimensions as data attribute, e. g.
 	
-		title="width: 615px, height: 250px"
+		data-width="615" data-height="250"
 	
 	This can be used as object for futher JavaScript processing when 
 	generating an image gallery.
 	
 	If either width or height of the resized image are missing, these values are automatically calculated based on the original dimensions.
 	
-	# Limitations:
+	# Limitations
 	
 	This template currently does not support external images.
+	
+	# Change log
+	
+	## Version 2.0
+	
+	- Store orinigal width and height in data attributes
+	- Add custom alt attributes
+	
+	## Version 1.1
+	
+	- Initial release
 -->
 <xsl:template name="image" mode="jit">
 	<xsl:param name="image" />
@@ -57,6 +71,7 @@
 	<xsl:param name="position" select="5" />
 	<xsl:param name="background-color" />
 	<xsl:param name="link" select="false()" />
+	<xsl:param name="alt" />
 	<xsl:param name="title" />
 	<xsl:param name="class" />
 	
@@ -71,6 +86,7 @@
 					<xsl:with-param name="mode" select="1" />
 					<xsl:with-param name="width" select="$width" />
 					<xsl:with-param name="height" select="$height" />
+					<xsl:with-param name="alt" select="$alt" />
 					<xsl:with-param name="title" select="$title" />
 					<xsl:with-param name="class" select="$class" />
 				</xsl:call-template>
@@ -84,6 +100,7 @@
 					<xsl:with-param name="width" select="$width" />
 					<xsl:with-param name="height" select="$height" />
 					<xsl:with-param name="position" select="$position" />
+					<xsl:with-param name="alt" select="$alt" />
 					<xsl:with-param name="title" select="$title" />
 					<xsl:with-param name="class" select="$class" />
 				</xsl:call-template>
@@ -99,6 +116,7 @@
 					<xsl:with-param name="height" select="$height" />
 					<xsl:with-param name="position" select="$position" />
 					<xsl:with-param name="background-color" select="$background-color" />
+					<xsl:with-param name="alt" select="$alt" />
 					<xsl:with-param name="title" select="$title" />
 					<xsl:with-param name="class" select="$class" />
 				</xsl:call-template>
@@ -109,11 +127,11 @@
 				<xsl:call-template name="resize" mode="jit">
 					<xsl:with-param name="image" select="$image" />
 					<xsl:with-param name="mode" select="0" />
+					<xsl:with-param name="alt" select="$alt" />
 					<xsl:with-param name="title" select="$title" />
 					<xsl:with-param name="class" select="$class" />
 				</xsl:call-template>
 			</xsl:otherwise>	
-		
 		</xsl:choose>
 	</xsl:variable>
 	
@@ -128,9 +146,7 @@
 			<xsl:copy-of select="$resized-image" />
 		</xsl:otherwise>
 	</xsl:choose>
-
 </xsl:template>
-
 
 <!--
 	Generate resized image
@@ -142,6 +158,7 @@
 	<xsl:param name="height" />
 	<xsl:param name="position" />
 	<xsl:param name="background-color" />
+	<xsl:param name="alt" />
 	<xsl:param name="title" />
 	<xsl:param name="class" />
 	
@@ -187,7 +204,22 @@
 		</xsl:choose>
 	</xsl:variable>
 	
-	<img title="" alt="width: '{$image/meta/@width}px', height: '{$image/meta/@height}px'">
+	<!-- Resized image -->
+	<img data-width="{$image/meta/@width}" data-height="{$image/meta/@height}">
+		
+		<!-- Title -->
+		<xsl:if test="$title != ''">
+			<xsl:attribute name="title">
+				<xsl:value-of select="$title"/>
+			</xsl:attribute>
+		</xsl:if>
+		
+		<!-- Alternative text -->
+		<xsl:if test="$alt != ''">
+			<xsl:attribute name="alt">
+				<xsl:value-of select="$alt"/>
+			</xsl:attribute>
+		</xsl:if>
 	
 		<!-- Set width -->
 		<xsl:if test="$jit-width != 0 and $jit-width != ''">
@@ -250,11 +282,8 @@
 				<xsl:value-of select="$class" />
 			</xsl:attribute>
 		</xsl:if>
-		
 	</img>
-
 </xsl:template>
-
 
 <!-- 
 	Calculate missing dimension
