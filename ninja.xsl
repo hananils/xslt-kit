@@ -11,6 +11,8 @@
 
 	# Example usage
 	
+		<xsl:apply-templates select="/data/articles/entry/body/p" mode="ninja" />
+	
 	# Options
 	
 	- level             a number to adjust the headline hierarchy, defaults to 0
