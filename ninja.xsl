@@ -6,8 +6,8 @@
 	
 	- Author: Nils Hörrmann <http://nilshoerrmann.de> based on a technique by Allen Chang <http://chaoticpattern.com>
 	- See: <http://symphony-cms.com/learn/articles/view/html-ninja-technique/>
-	- Version: 1.1
-	- Release date: 20th September 2011
+	- Version: 1.2
+	- Release date: 22nd September 2011
 
 	# Example usage
 	
@@ -16,8 +16,14 @@
 	# Options
 	
 	- level             A number to adjust the headline hierarchy, defaults to 0
+	- prefix            A string or node added as first child to the matched elements
+	- suffix            A string or node added as last child to the matched elements
 	
 	# Change log
+	
+	## Version 1.2
+	
+	- Added $prefix and $suffix parameters
 	
 	## Version 1.1
 	
@@ -30,14 +36,22 @@
 
 <xsl:template match="//*" mode="ninja">
 	<xsl:param name="level" select="0" />
+	<xsl:param name="prefix" />
+	<xsl:param name="suffix" />
 	
 	<!-- Create element -->
 	<xsl:element name="{name()}">
+		
+		<!-- Prefix -->
+		<xsl:copy-of select="$prefix" />
 	
 		<!-- Apply templates for inline elements, attributes and text nodes -->
 		<xsl:apply-templates select="* | @* | text()" mode="ninja">
 			<xsl:with-param name="level" select="$level" />
 		</xsl:apply-templates>
+		
+		<!-- Suffix -->
+		<xsl:copy-of select="$suffix" />
 	</xsl:element>
 </xsl:template>
 
