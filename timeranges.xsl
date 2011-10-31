@@ -6,7 +6,7 @@
 	
 	- Author: Nils Hörrmann <http://nilshoerrmann.de>
 	- Version: 1.0
-	- Release date: 28th October 2011
+	- Release date: 31st October 2011
 	
 	# Example usage
 	
@@ -23,6 +23,16 @@
 	# Requirements
 	
 	kit/datetime.xsl
+	
+	# Change Log
+	
+	## Version 1.1
+	
+	- Added non-breaking space for German times
+	
+	## Version 1.0
+	
+	- Initial release
 -->
 
 <xsl:template name="timerange">
@@ -84,7 +94,7 @@
 						<xsl:with-param name="date-separator" select="' – '" />
 						<xsl:with-param name="datetime-separator" select="', '" />
 						<xsl:with-param name="time-separator" select="' – '" />
-						<xsl:with-param name="timeformat" select="'h \U\h\r'" />
+						<xsl:with-param name="timeformat" select="'h_\U\h\r'" />
 					</xsl:call-template>
 				</xsl:when>
 			</xsl:choose>
