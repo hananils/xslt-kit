@@ -68,8 +68,8 @@
 						<xsl:with-param name="dateformat-long" select="'D_M Y'" />
 						<xsl:with-param name="dateformat-short" select="'D_M'" />
 						<xsl:with-param name="date-separator" select="' – '" />
-						<xsl:with-param name="datetime-separator" select="' – '" />
-						<xsl:with-param name="time-separator" select="', '" />
+						<xsl:with-param name="datetime-separator" select="', '" />
+						<xsl:with-param name="time-separator" select="' – '" />
 						<xsl:with-param name="timeformat" select="'t'" />
 					</xsl:call-template>
 				</xsl:when>
@@ -82,8 +82,8 @@
 						<xsl:with-param name="dateformat-long" select="'x._M Y'" />
 						<xsl:with-param name="dateformat-short" select="'x._M'" />
 						<xsl:with-param name="date-separator" select="' – '" />
-						<xsl:with-param name="datetime-separator" select="' – '" />
-						<xsl:with-param name="time-separator" select="', '" />
+						<xsl:with-param name="datetime-separator" select="', '" />
+						<xsl:with-param name="time-separator" select="' – '" />
 						<xsl:with-param name="timeformat" select="'h \U\h\r'" />
 					</xsl:call-template>
 				</xsl:when>
