@@ -21,14 +21,20 @@
 	
 	                     `title` (English) or `anrede` (German) – depending on the title setting
 	                     `prefix` (e. g. "Prof.")
-	                     `name` (English) or `vorname` (German)
+	                     `firstname` (English) or `vorname` (German)
 	                     `surname` (English) or `nachname` (German)
 	                     `suffix` (e. g. "PHD")
 	                     
-	- title              show title, defaults to `false()`
+	- title              Show title, defaults to `false()`
 	- nn                 Value returned if none of the above values is provide, defaults to "N.N."
 	
 	# Change log
+	
+	## Version 1.1
+	
+	- Added option to link names in lists
+	- Added option to have static names in lists
+	- Renamed English `name` to `firstname` in single name template
 	
 	## Version 1.0
 
@@ -66,10 +72,10 @@
 			<xsl:if test="$person/prefix != ''">
 				<xsl:text> </xsl:text>
 			</xsl:if>
-			<xsl:value-of select="$person/name | $person/vorname" />
+			<xsl:value-of select="$person/firstname | $person/vorname" />
 			
 			<!-- Surname -->
-			<xsl:if test="$person/name != '' or $person/vorname = ''">
+			<xsl:if test="$person/firstname != '' or $person/vorname != ''">
 				<xsl:text> </xsl:text>
 			</xsl:if>
 			<xsl:value-of select="$person/surname | $person/nachname" />
@@ -98,16 +104,22 @@
 	
 	# Options
 	
-	- persons            Multiple person nodes, see "name" template                  
-	- title              show title, defaults to `false()`
+	- persons            Multiple person nodes, see "name" template
+	- link               Link to a person's profile, use `{@handle}` as name placeholder
+	- handle             Name of node used to replace `{@handle}` placeholder (relative to the node of a single person)
+	- title              Show title, defaults to `false()`
+	- static             Static names to be added at the end of the list
 	- nn                 Value returned if none of the above values is provide, defaults to "N.N."
-	- connector          characters used to join names, defaults to `, `
-	- last               connector used to add the last name, defaults to ` and `
+	- connector          Characters used to join names, defaults to `, `
+	- last               Connector used to add the last name, defaults to ` and `
 -->
 <xsl:template name="names">
 	<xsl:param name="persons" />
+	<xsl:param name="link" />
+	<xsl:param name="handle" />
 	<xsl:param name="nn" select="'N.&#8201;N.'" />
 	<xsl:param name="title" select="false()" />
+	<xsl:param name="static" />
 	<xsl:param name="connector" select="', '" />
 	<xsl:param name="last" select="' and '" />
 	
@@ -115,21 +127,49 @@
 		
 		<!-- Connect names -->
 		<xsl:choose>
-			<xsl:when test="position() != 1 and position() != last()">
+			<xsl:when test="position() != 1 and (position() != last() or $static != '') ">
 				<xsl:value-of select="$connector" />
 			</xsl:when>
-			<xsl:when test="position() != 1 and position() = last()">
+			<xsl:when test="position() != 1 and position() = last() and $static = ''">
 				<xsl:value-of select="$last" />
 			</xsl:when>
 		</xsl:choose>	
+
+		<!-- Get name -->
+		<xsl:choose>
 		
-		<!-- Format name -->
-		<xsl:call-template name="name">
-			<xsl:with-param name="person" select="current()" />
-			<xsl:with-param name="nn" select="$nn" />
-			<xsl:with-param name="title" select="$title" />
-		</xsl:call-template>
+			<!-- Linked -->
+			<xsl:when test="$link != ''">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="substring-before($link, '{@handle}')"/>
+						<xsl:value-of select="current()/*[name() = $handle]/@handle"/>
+						<xsl:value-of select="substring-after($link, '{@handle}')"/>
+					</xsl:attribute>
+					<xsl:call-template name="name">
+						<xsl:with-param name="person" select="current()" />
+						<xsl:with-param name="nn" select="$nn" />
+						<xsl:with-param name="title" select="$title" />
+					</xsl:call-template>
+				</a>
+			</xsl:when>
+			
+			<!-- Plain -->
+			<xsl:otherwise>
+				<xsl:call-template name="name">
+					<xsl:with-param name="person" select="current()" />
+					<xsl:with-param name="nn" select="$nn" />
+					<xsl:with-param name="title" select="$title" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:for-each>
+	
+	<!-- Static names -->
+	<xsl:if test="$static != ''">
+		<xsl:value-of select="$connector" />
+		<xsl:value-of select="$static" />
+	</xsl:if>
 </xsl:template>
 
 
