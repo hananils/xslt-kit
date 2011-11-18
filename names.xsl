@@ -83,10 +83,10 @@
 			<!-- Suffix -->
 			<xsl:choose>
 				<xsl:when test="$person/suffix != '' and not(starts-with($person/suffix, '('))">
-					<xsl:text>, </xsl:text>
+					<xsl:text>,&#0160;</xsl:text>
 				</xsl:when>
 				<xsl:when test="$person/suffix != '' and starts-with($person/suffix, '(')">
-					<xsl:text> </xsl:text>
+					<xsl:text>&#0160;</xsl:text>
 				</xsl:when>
 			</xsl:choose>
 			<xsl:choose>
