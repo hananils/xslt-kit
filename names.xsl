@@ -167,7 +167,9 @@
 	
 	<!-- Static names -->
 	<xsl:if test="$static != ''">
-		<xsl:value-of select="$connector" />
+		<xsl:if test="$persons/*">
+			<xsl:value-of select="$connector" />
+		</xsl:if>
 		<xsl:value-of select="$static" />
 	</xsl:if>
 </xsl:template>
