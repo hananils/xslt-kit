@@ -6,7 +6,7 @@
 	
 	- Author: Nils Hörrmann <http://nilshoerrmann.de> based on a utility by Allen Chang <http://chaoticpattern.com>
 	- See: <http://symphony-cms.com/download/xslt-utilities/view/20506/>
-	- Version: 2.0
+	- Version: 2.1
 	- Release date: 13th December 2011
 	
 	# Example usage
@@ -55,6 +55,10 @@
 	
 	# Change log
 	
+	## Version 2.1
+	
+	- Bug fixes
+	
 	## Version 2.0
 	
 	- Simplified templates
@@ -82,12 +86,14 @@
 	
 	<!-- Parse date -->
 	<xsl:variable name="year" select="substring($date, 1, 4)" />
-	<xsl:variable name="month" select="substring($date, 7, 2)" />
+	<xsl:variable name="month" select="substring($date, 6, 2)" />
 	<xsl:variable name="day" select="substring($date, 9, 2)" />
 
 	<!-- Format date -->
 	<xsl:call-template name="datetime-formatter">
-		<xsl:with-param name="date" select="$date" />
+		<xsl:with-param name="year" select="$year" />
+		<xsl:with-param name="month" select="$month" />
+		<xsl:with-param name="day" select="$day" />
 		<xsl:with-param name="time" select="$date/@time" />
 		<xsl:with-param name="weekday" select="$date/@weekday" />
 		<xsl:with-param name="format" select="$format" />
@@ -104,12 +110,12 @@
 	<!-- Parse date -->
 	<xsl:variable name="year" select="substring($date, 27, 4)" />
 	<xsl:variable name="month">
-		<xsl:if test="/data/datetime/language[1]/months/month[@abbr = substring($date, 5, 3)]/@string &lt; 10">0</xsl:if>
-		<xsl:value-of select="/data/datetime/language[1]/months/month[@abbr = substring($date, 5, 3)]/@string" />
+		<xsl:if test="/data/datetime/language[@id = 'en']/months/month[@abbr = substring($date, 5, 3)]/@id &lt; 10">0</xsl:if>
+		<xsl:value-of select="/data/datetime/language[@id = 'en']/months/month[@abbr = substring($date, 5, 3)]/@id" />
 	</xsl:variable>
 	<xsl:variable name="day" select="substring($date, 9, 2)" />
 	<xsl:variable name="time" select="substring($date, 12, 5)" />
-	<xsl:variable name="weekday" select="/data/datetime/language[1]/weekdays/weekday[@abbr = substring($date, 1, 3)]/@string" />
+	<xsl:variable name="weekday" select="/data/datetime/language[@id = 'en']/weekdays/weekday[@abbr = substring($date, 1, 3)]/@id" />
 	
 	<!-- Format date -->
 	<xsl:call-template name="datetime-formatter">
@@ -216,12 +222,12 @@
 		
 		<!-- Month as a full word, e. g. January, March, September -->
 		<xsl:when test="$string = 'M'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = $month]" />
+			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = number($month)]" />
 		</xsl:when>
 		
 		<!-- Month in 3 letters, e. g. Jan, Mar, Sep -->
 		<xsl:when test="$string = 'm'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = $month]/@abbr" />
+			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = number($month)]/@abbr" />
 		</xsl:when>
 		
 		<!-- Month in digits without leading zero -->
