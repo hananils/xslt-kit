@@ -5,8 +5,8 @@
 	RESIZE IMAGES
 	
 	- Author: Nils Hörrmann <http://nilshoerrmann.de>
-	- Version: 1.1
-	- Release date: 8th March 2011
+	- Version: 2.1
+	- Release date: 13th December 2011
 	
 	# Example usage
 	
@@ -52,6 +52,10 @@
 	This template currently does not support external images.
 	
 	# Change log
+	
+	## Version 2.1
+	
+	- Remove modes on named templates
 	
 	## Version 2.0
 	
