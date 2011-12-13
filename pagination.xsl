@@ -5,8 +5,8 @@
 	DATA SOURCE PAGINATION
 	
 	- Author: Nils Hörrmann <http://nilshoerrmann.de> based on a utility by Nick Dunn <http://nick-dunn.co.uk>
-	- Version: 2.0
-	- Release date: 19th September 2011
+	- Version: 2.1
+	- Release date: 13th December 2011
 	
 	# Example usage
 	
@@ -37,6 +37,10 @@
 	- class-disabled:    Class used for the disabled page link
 	
 	# Change log
+	
+	## Version 2.1
+	
+	- Consistent naming of internal templates
 
 	## Version 2.0
 	
