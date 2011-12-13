@@ -10,7 +10,7 @@
 	
 	# Example usage
 	
-		<xsl:call-template name="image" mode="jit">
+		<xsl:call-template name="image">
 			<xsl:with-param name="image" select="image" />
 			<xsl:with-param name="mode" select="2" />
 			<xsl:with-param name="width" select="50" />
@@ -62,7 +62,7 @@
 	
 	- Initial release
 -->
-<xsl:template name="image" mode="jit">
+<xsl:template name="image">
 	<xsl:param name="image" />
 	<xsl:param name="mode" select="'resize'" />
 	<xsl:param name="width" select="0" />
@@ -80,7 +80,7 @@
 		
 			<!-- Resize -->
 			<xsl:when test="$mode = 'resize' or $mode = 1">
-				<xsl:call-template name="resize" mode="jit">
+				<xsl:call-template name="jit-resize">
 					<xsl:with-param name="image" select="$image" />
 					<xsl:with-param name="mode" select="1" />
 					<xsl:with-param name="width" select="$width" />
@@ -93,7 +93,7 @@
 			
 			<!-- Crop to fill -->
 			<xsl:when test="$mode = 'crop' or $mode = 2">
-				<xsl:call-template name="resize" mode="jit">
+				<xsl:call-template name="jit-resize">
 					<xsl:with-param name="image" select="$image" />
 					<xsl:with-param name="mode" select="2" />
 					<xsl:with-param name="width" select="$width" />
@@ -108,7 +108,7 @@
 			
 			<!-- Resize canvas -->
 			<xsl:when test="$mode = 'resize-crop' or $mode = 3">
-				<xsl:call-template name="resize" mode="jit">
+				<xsl:call-template name="jit-resize">
 					<xsl:with-param name="image" select="$image" />
 					<xsl:with-param name="mode" select="3" />
 					<xsl:with-param name="width" select="$width" />
@@ -123,7 +123,7 @@
 			
 			<!-- Direct display -->
 			<xsl:otherwise>
-				<xsl:call-template name="resize" mode="jit">
+				<xsl:call-template name="jit-resize">
 					<xsl:with-param name="image" select="$image" />
 					<xsl:with-param name="mode" select="0" />
 					<xsl:with-param name="alt" select="$alt" />
@@ -150,7 +150,7 @@
 <!--
 	Generate resized image
 -->
-<xsl:template name="resize" mode="jit">
+<xsl:template name="jit-resize">
 	<xsl:param name="image" />
 	<xsl:param name="mode" />
 	<xsl:param name="width" />
@@ -172,7 +172,7 @@
 			
 			<!-- Calculate with -->
 			<xsl:otherwise>
-				<xsl:call-template name="calculate-dimension" mode="jit">
+				<xsl:call-template name="jit-calculate-dimension">
 					<xsl:with-param name="a" select="$image/meta/@width" />
 					<xsl:with-param name="b" select="$image/meta/@height" />
 					<xsl:with-param name="c" select="$height" />
@@ -193,7 +193,7 @@
 			
 			<!-- Calculate height -->
 			<xsl:otherwise>
-				<xsl:call-template name="calculate-dimension" mode="jit">
+				<xsl:call-template name="jit-calculate-dimension">
 					<xsl:with-param name="a" select="$image/meta/@height" />
 					<xsl:with-param name="b" select="$image/meta/@width" />
 					<xsl:with-param name="c" select="$width" />
@@ -287,7 +287,7 @@
 <!-- 
 	Calculate missing dimension
 -->
-<xsl:template name="calculate-dimension" mode="jit">
+<xsl:template name="jit-calculate-dimension">
 	<xsl:param name="a" />
 	<xsl:param name="b" />
 	<xsl:param name="c" />

@@ -134,7 +134,7 @@
 		
 			<!-- Previous link -->
 			<xsl:if test="$show-navigation = true()">
-				<xsl:call-template name="navigation">
+				<xsl:call-template name="pagination-navigation">
 					<xsl:with-param name="class" select="$class-previous" />
 					<xsl:with-param name="class-disabled" select="$class-disabled" />
 					<xsl:with-param name="disabled" select="boolean($page-next = 2)" />
@@ -159,7 +159,7 @@
 			
 			<!-- Next link -->
 			<xsl:if test="$show-navigation = true()">
-				<xsl:call-template name="navigation">
+				<xsl:call-template name="pagination-navigation">
 					<xsl:with-param name="class" select="$class-next" />
 					<xsl:with-param name="class-disabled" select="$class-disabled" />
 					<xsl:with-param name="disabled" select="boolean($page-next = 1)" />
@@ -176,7 +176,7 @@
 <!--
 	Navigation
 -->
-<xsl:template name="navigation">
+<xsl:template name="pagination-navigation">
 	<xsl:param name="class" />
 	<xsl:param name="class-disabled" />
 	<xsl:param name="disabled" select="false()" />
