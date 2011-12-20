@@ -175,14 +175,16 @@
 			</xsl:when>
 			
 			<!-- Calculate with -->
-			<xsl:otherwise>
+			<xsl:when test="$image/meta/@width and $image/meta/@height">
 				<xsl:call-template name="jit-calculate-dimension">
 					<xsl:with-param name="a" select="$image/meta/@width" />
 					<xsl:with-param name="b" select="$image/meta/@height" />
 					<xsl:with-param name="c" select="$height" />
 				</xsl:call-template>
-			</xsl:otherwise>
-			
+			</xsl:when>
+
+			<!-- Fallback to zero-->
+			<xsl:otherwise>0</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
 	
@@ -196,14 +198,16 @@
 			</xsl:when>
 			
 			<!-- Calculate height -->
-			<xsl:otherwise>
+			<xsl:when test="$image/meta/@width and $image/meta/@height">
 				<xsl:call-template name="jit-calculate-dimension">
 					<xsl:with-param name="a" select="$image/meta/@height" />
 					<xsl:with-param name="b" select="$image/meta/@width" />
 					<xsl:with-param name="c" select="$width" />
 				</xsl:call-template>
-			</xsl:otherwise>
-			
+			</xsl:when>
+
+			<!-- Fallback to zero-->
+			<xsl:otherwise>0</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
 	
@@ -225,14 +229,14 @@
 		</xsl:if>
 	
 		<!-- Set width -->
-		<xsl:if test="$jit-width != 0 and $jit-width != ''">
+		<xsl:if test="$jit-width != 0 and $jit-width != '' and $jit-width != 'NaN'">
 			<xsl:attribute name="width">
 				<xsl:value-of select="$jit-width" />
 			</xsl:attribute>
 		</xsl:if>
 		
 		<!-- Set height -->
-		<xsl:if test="$jit-height != 0 and $jit-height != ''">
+		<xsl:if test="$jit-height != 0 and $jit-height != '' and $jit-height != 'NaN'">
 			<xsl:attribute name="height">
 				<xsl:value-of select="$jit-height" />
 			</xsl:attribute>
