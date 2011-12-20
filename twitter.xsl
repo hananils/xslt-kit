@@ -70,7 +70,8 @@
 				
 				<!-- Author -->
 				<xsl:value-of select="retweeted_status/user/name" />
-				<xsl:text>, @</xsl:text>
+				<xsl:text>, </xsl:text>
+				<em>@</em>
 				<a href="https://twitter.com/{retweeted_status/user/screen_name}" title="{retweeted_status/user/name}" class="author">
 					<xsl:value-of select="retweeted_status/user/screen_name" />
 				</a>
@@ -125,8 +126,8 @@
 	<xsl:param name="tweet" />
 	<xsl:variable name="user" select="$tweet/entities/user_mentions/user_mention[screen_name = substring-after(current(), '@')]" />
 
-	<xsl:text>@</xsl:text>
-	<a href="https://twitter.com/{$user/screen_name}" title="{$user/name}">
+	<em>@</em>
+	<a href="https://twitter.com/{$user/screen_name}" title="{$user/name}" class="username">
 		<xsl:value-of select="$user/screen_name" />
 	</a>
 	<xsl:text> </xsl:text>
@@ -137,8 +138,8 @@
 	<xsl:param name="tweet" />
 	<xsl:variable name="tag" select="substring-after(., '#')" />
 
-	<xsl:text>#</xsl:text>
-	<a href="https://twitter.com/search?q=%23{$tag}">
+	<em>#</em>
+	<a href="https://twitter.com/search?q=%23{$tag}" class="hashtag">
 		<xsl:value-of select="$tag" />
 	</a>
 	<xsl:text> </xsl:text>
