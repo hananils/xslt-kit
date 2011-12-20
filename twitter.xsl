@@ -13,6 +13,8 @@
 	<xsl:param name="replies" select="true()" />
 	<xsl:param name="max" select="10" />
 	<xsl:param name="format" />
+	<xsl:param name="opening-quote" select="'&#8220;'" />
+	<xsl:param name="closing-quote" select="'&#8221;'" />
 
 	<ul class="twitter">
 		<xsl:choose>
@@ -23,6 +25,8 @@
 					<xsl:with-param name="tweeted" select="$tweeted" />
 					<xsl:with-param name="retweeted" select="$retweeted" />
 					<xsl:with-param name="format" select="$format" />
+					<xsl:with-param name="opening-quote" select="$opening-quote" />
+					<xsl:with-param name="closing-quote" select="$closing-quote" />
 				</xsl:apply-templates>
 			</xsl:when>
 			
@@ -32,6 +36,8 @@
 					<xsl:with-param name="tweeted" select="$tweeted" />
 					<xsl:with-param name="retweeted" select="$retweeted" />
 					<xsl:with-param name="format" select="$format" />
+					<xsl:with-param name="opening-quote" select="$opening-quote" />
+					<xsl:with-param name="closing-quote" select="$closing-quote" />
 				</xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -43,12 +49,16 @@
 	<xsl:param name="tweeted" />
 	<xsl:param name="retweeted" />
 	<xsl:param name="format" />
+	<xsl:param name="opening-quote" select="'&#8220;'" />
+	<xsl:param name="closing-quote" select="'&#8222;'" />
 
 	<li>
 		<xsl:apply-templates select="." mode="tweet">
 			<xsl:with-param name="tweeted" select="$tweeted" />
 			<xsl:with-param name="retweeted" select="$retweeted" />
 			<xsl:with-param name="format" select="$format" />
+			<xsl:with-param name="opening-quote" select="$opening-quote" />
+			<xsl:with-param name="closing-quote" select="$closing-quote" />
 		</xsl:apply-templates>
 	</li>
 </xsl:template>
@@ -58,6 +68,8 @@
 	<xsl:param name="tweeted" />
 	<xsl:param name="retweeted" />
 	<xsl:param name="format" />
+	<xsl:param name="opening-quote" select="'&#8220;'" />
+	<xsl:param name="closing-quote" select="'&#8222;'" />
 
 	<xsl:choose>
 	
@@ -81,6 +93,8 @@
 				<!-- Text -->
 				<xsl:apply-templates select="str:tokenize(retweeted_status/text,' ')" mode="tweet">
 					<xsl:with-param name="tweet" select="." />
+					<xsl:with-param name="opening-quote" select="$opening-quote" />
+					<xsl:with-param name="closing-quote" select="$closing-quote" />
 				</xsl:apply-templates>
 			</p>
 				
@@ -99,7 +113,7 @@
 			<p>
 			
 				<!-- Text -->
-				<xsl:apply-templates select="str:tokenize(text,' ')" mode="tweet">
+				<xsl:apply-templates select="str:tokenize(text)" mode="tweet">
 					<xsl:with-param name="tweet" select="." />
 				</xsl:apply-templates>
 			</p>
@@ -117,7 +131,37 @@
 
 <!-- Text -->
 <xsl:template match="token" mode="tweet">
-	<xsl:value-of select="." />
+	<xsl:param name="opening-quote" />
+	<xsl:param name="closing-quote" />
+	
+	<!-- Opening quotes -->
+	<xsl:variable name="quote-start">
+		<xsl:choose>
+			<xsl:when test="starts-with(., '&quot;')">
+				<xsl:value-of select="$opening-quote" />
+				<xsl:value-of select="substring-after(., '&quot;')" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="." />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+	
+	<!-- Closing quotes -->
+	<xsl:variable name="quote-end">
+		<xsl:choose>
+			<xsl:when test="substring-before($quote-start, '&quot;') != ''">
+				<xsl:value-of select="substring-before($quote-start, '&quot;')" />
+				<xsl:value-of select="$closing-quote" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$quote-start" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+
+	<!-- Word -->
+	<xsl:value-of select="$quote-end"/>
 	<xsl:text> </xsl:text>
 </xsl:template>
 
@@ -149,10 +193,30 @@
 <xsl:template match="token[starts-with(., 'http')]" mode="tweet" priority="1">
 	<xsl:param name="tweet" />
 	<xsl:variable name="url" select="$tweet/entities/urls/url[url = current()]" />
+	<xsl:variable name="url-mix" select="$tweet/entities/urls/url[starts-with(current(), url)]" />
 
-	<a href="{$url/expanded_url}">
-		<xsl:value-of select="$url/display_url"/>
-	</a>
+	<xsl:choose>
+		
+		<!-- URL found -->
+		<xsl:when test="url">
+			<a href="{$url/expanded_url}">
+				<xsl:value-of select="$url/display_url" />
+			</a>
+		</xsl:when>
+		<xsl:when test="$url-mix">
+			<a href="{$url-mix/expanded_url}">
+				<xsl:value-of select="$url-mix/display_url" />
+			</a>
+			<xsl:value-of select="substring-after(., $url-mix/url)" />
+		</xsl:when>
+		
+		<!-- URL not found -->
+		<xsl:otherwise>
+			<a href="{.}">
+				<xsl:value-of select="."/>
+			</a>
+		</xsl:otherwise>
+	</xsl:choose>
 	<xsl:text> </xsl:text>
 </xsl:template>
 
