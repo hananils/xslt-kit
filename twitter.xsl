@@ -9,15 +9,32 @@
 -->
 <xsl:template match="statuses" mode="twitter">
 	<xsl:param name="tweeted" select="'tweeted at {$date}'" />
-	<xsl:param name="retweeted" select="'by {$user}, retweeted at {$date}'" />
+	<xsl:param name="retweeted" select="'retweeted at {$date}'" />
+	<xsl:param name="replies" select="true()" />
+	<xsl:param name="max" select="10" />
 	<xsl:param name="format" />
 
 	<ul class="twitter">
-		<xsl:apply-templates select="status" mode="twitter">
-			<xsl:with-param name="tweeted" select="$tweeted" />
-			<xsl:with-param name="retweeted" select="$retweeted" />
-			<xsl:with-param name="format" select="$format" />
-		</xsl:apply-templates>
+		<xsl:choose>
+			
+			<!-- Include replies -->
+			<xsl:when test="$replies = true()">
+				<xsl:apply-templates select="status[position() &lt;= $max]" mode="twitter">
+					<xsl:with-param name="tweeted" select="$tweeted" />
+					<xsl:with-param name="retweeted" select="$retweeted" />
+					<xsl:with-param name="format" select="$format" />
+				</xsl:apply-templates>
+			</xsl:when>
+			
+			<!-- Exclude replies -->
+			<xsl:otherwise>
+				<xsl:apply-templates select="status[not(starts-with(text, '@'))][position() &lt;= $max]" mode="twitter">
+					<xsl:with-param name="tweeted" select="$tweeted" />
+					<xsl:with-param name="retweeted" select="$retweeted" />
+					<xsl:with-param name="format" select="$format" />
+				</xsl:apply-templates>
+			</xsl:otherwise>
+		</xsl:choose>
 	</ul>
 </xsl:template>
 
@@ -50,6 +67,15 @@
 				<xsl:if test="retweeted_status/*">
 					<xsl:attribute name="class">retweeted</xsl:attribute>
 				</xsl:if>
+				
+				<!-- Author -->
+				<xsl:value-of select="retweeted_status/user/name" />
+				<xsl:text>, @</xsl:text>
+				<a href="https://twitter.com/{retweeted_status/user/screen_name}" title="{retweeted_status/user/name}" class="author">
+					<xsl:value-of select="retweeted_status/user/screen_name" />
+				</a>
+				<xsl:text>:</xsl:text>
+				<br />
 		
 				<!-- Text -->
 				<xsl:apply-templates select="str:tokenize(retweeted_status/text,' ')" mode="tweet">
@@ -147,23 +173,9 @@
 		<xsl:copy-of select="substring-after($text, '{$date}')" />
 	</xsl:variable>
 
-	<xsl:variable name="replace-user">
-		<xsl:choose>
-			<xsl:when test="$user != '' and contains($replace-date, '{$user}')">
-				<xsl:value-of select="substring-before($replace-date, '{$user}')" />
-				<xsl:text>@</xsl:text>
-				<xsl:value-of select="$user" />
-				<xsl:value-of select="substring-after($replace-date, '{$user}')" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$replace-date" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-
 	<footer>
 		<a href="{$link}">
-			<xsl:value-of select="$replace-user" />
+			<xsl:value-of select="$replace-date" />
 		</a>
 	</footer>
 </xsl:template>
