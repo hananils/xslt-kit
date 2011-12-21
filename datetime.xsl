@@ -232,31 +232,17 @@
 		
 		<!-- Month in digits without leading zero -->
 		<xsl:when test="$string = 'N'">
-			<xsl:choose>
-				<xsl:when test="starts-with($month, 0)">
-					<xsl:value-of select="substring($month, 2)" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$month" />
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:value-of select="format-number($month, '#0')"/>
 		</xsl:when>
 		
 		<!-- Month in digits with leading zero -->
 		<xsl:when test="$string = 'n'">
-			<xsl:choose>
-				<xsl:when test="not(starts-with($month, 0))">
-					<xsl:value-of select="concat('0', $month)" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$month" />
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:value-of select="format-number($month, '00')"/>
 		</xsl:when>
 
 		<!-- Day with suffix and no leading zero, e. g. 1st, 23rd -->
 		<xsl:when test="$string = 'D'">
-			<xsl:value-of select="format-number($day, '0')" />
+			<xsl:value-of select="format-number($day, '#0')" />
 			<sup>
 				<xsl:choose>
 					<xsl:when test="(substring($day, 2) = 1) and not(substring($day, 1, 1) = 1)">st</xsl:when>
@@ -269,26 +255,12 @@
 		
 		<!-- Day in digits with leading zero, e. g. 01, 09, 12, 25 -->
 		<xsl:when test="$string = 'd'">
-			<xsl:choose>
-				<xsl:when test="not(starts-with($day, 0))">
-					<xsl:value-of select="concat('0', $day)" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$day" />
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:value-of select="format-number($day, '00')" />
 		</xsl:when>
 		
 		<!-- Day in digits with no leading zero, e. g. 1, 9, 12, 25 -->
 		<xsl:when test="$string = 'x'">
-			<xsl:choose>
-				<xsl:when test="starts-with($day, 0)">
-					<xsl:value-of select="substring($day, 2)" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$day" />
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:value-of select="format-number($day, '#0')" />
 		</xsl:when>
 		
 		<!-- Time in 24-hours, e. g. 18:30 -->
@@ -313,14 +285,8 @@
 		
 		<!-- Time in 24-hours with no leading zero, e. g. 4:25 -->
 		<xsl:when test="$string = 'h'">
-			<xsl:choose>
-				<xsl:when test="starts-with($time, '0')">
-					<xsl:value-of select="substring($time, 2)" />		
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$time" />		
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:value-of select="format-number(substring-before($time, ':'), '#0')" />
+			<xsl:value-of select="substring($time, 3)" />
 		</xsl:when>
 		
 		<!-- Weekday as a full word, e. g. Monday, Tuesday -->
