@@ -8,123 +8,120 @@
 	Twitter
 -->
 <xsl:template match="statuses" mode="twitter">
-	<xsl:param name="tweeted" select="'tweeted at {$date}'" />
-	<xsl:param name="retweeted" select="'retweeted at {$date}'" />
+	<xsl:param name="lang" select="'en'" />
+	<xsl:param name="format" select="'M D, Y'" />
 	<xsl:param name="replies" select="true()" />
 	<xsl:param name="max" select="10" />
-	<xsl:param name="format" />
-	<xsl:param name="opening-quote" select="'&#8220;'" />
-	<xsl:param name="closing-quote" select="'&#8221;'" />
-
-	<ul class="twitter">
+	
+	<!-- Set quotes -->
+	<xsl:variable name="opening-quote">
 		<xsl:choose>
-			
-			<!-- Include replies -->
-			<xsl:when test="$replies = true()">
-				<xsl:apply-templates select="status[position() &lt;= $max]" mode="twitter">
-					<xsl:with-param name="tweeted" select="$tweeted" />
-					<xsl:with-param name="retweeted" select="$retweeted" />
-					<xsl:with-param name="format" select="$format" />
-					<xsl:with-param name="opening-quote" select="$opening-quote" />
-					<xsl:with-param name="closing-quote" select="$closing-quote" />
-				</xsl:apply-templates>
-			</xsl:when>
-			
-			<!-- Exclude replies -->
-			<xsl:otherwise>
-				<xsl:apply-templates select="status[not(starts-with(text, '@'))][position() &lt;= $max]" mode="twitter">
-					<xsl:with-param name="tweeted" select="$tweeted" />
-					<xsl:with-param name="retweeted" select="$retweeted" />
-					<xsl:with-param name="format" select="$format" />
-					<xsl:with-param name="opening-quote" select="$opening-quote" />
-					<xsl:with-param name="closing-quote" select="$closing-quote" />
-				</xsl:apply-templates>
-			</xsl:otherwise>
+			<xsl:when test="$lang = 'de'">&#8222;</xsl:when>
+			<xsl:otherwise>&#8220;</xsl:otherwise>
 		</xsl:choose>
-	</ul>
+	</xsl:variable>
+	<xsl:variable name="closing-quote">
+		<xsl:choose>
+			<xsl:when test="$lang = 'de'">&#8220;</xsl:when>
+			<xsl:otherwise>&#8221;</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+	
+	<!-- Tweets -->
+	<xsl:choose>
+		
+		<!-- Include replies -->
+		<xsl:when test="$replies = true()">
+			<xsl:apply-templates select="status[position() &lt;= $max]" mode="twitter">
+				<xsl:with-param name="lang" select="$lang" />
+				<xsl:with-param name="format" select="$format" />
+				<xsl:with-param name="opening-quote" select="$opening-quote" />
+				<xsl:with-param name="closing-quote" select="$closing-quote" />
+			</xsl:apply-templates>
+		</xsl:when>
+		
+		<!-- Exclude replies -->
+		<xsl:otherwise>
+			<xsl:apply-templates select="status[not(starts-with(text, '@'))][position() &lt;= $max]" mode="twitter">
+				<xsl:with-param name="lang" select="$lang" />
+				<xsl:with-param name="format" select="$format" />
+				<xsl:with-param name="opening-quote" select="$opening-quote" />
+				<xsl:with-param name="closing-quote" select="$closing-quote" />
+			</xsl:apply-templates>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <!-- List of tweets -->
 <xsl:template match="status" mode="twitter">
-	<xsl:param name="tweeted" />
-	<xsl:param name="retweeted" />
+	<xsl:param name="lang" />
 	<xsl:param name="format" />
-	<xsl:param name="opening-quote" select="'&#8220;'" />
-	<xsl:param name="closing-quote" select="'&#8222;'" />
+	<xsl:param name="opening-quote" />
+	<xsl:param name="closing-quote" />
 
-	<li>
+	<article>
 		<xsl:apply-templates select="." mode="tweet">
-			<xsl:with-param name="tweeted" select="$tweeted" />
-			<xsl:with-param name="retweeted" select="$retweeted" />
+			<xsl:with-param name="lang" select="$lang" />
 			<xsl:with-param name="format" select="$format" />
 			<xsl:with-param name="opening-quote" select="$opening-quote" />
 			<xsl:with-param name="closing-quote" select="$closing-quote" />
 		</xsl:apply-templates>
-	</li>
+	</article>
 </xsl:template>
 
 <!-- Tweet -->
 <xsl:template match="status" mode="tweet">
-	<xsl:param name="tweeted" />
-	<xsl:param name="retweeted" />
+	<xsl:param name="lang" />
 	<xsl:param name="format" />
-	<xsl:param name="opening-quote" select="'&#8220;'" />
-	<xsl:param name="closing-quote" select="'&#8222;'" />
+	<xsl:param name="opening-quote" />
+	<xsl:param name="closing-quote" />
 
 	<xsl:choose>
 	
 		<!-- Retweet -->
 		<xsl:when test="retweeted_status/*">
-			<p>
-				<xsl:if test="retweeted_status/*">
-					<xsl:attribute name="class">retweeted</xsl:attribute>
-				</xsl:if>
-				
-				<!-- Author -->
-				<xsl:value-of select="retweeted_status/user/name" />
-				<xsl:text>, </xsl:text>
-				<em>@</em>
-				<a href="https://twitter.com/{retweeted_status/user/screen_name}" title="{retweeted_status/user/name}" class="author">
-					<xsl:value-of select="retweeted_status/user/screen_name" />
-				</a>
-				<xsl:text>:</xsl:text>
-				<br />
-		
-				<!-- Text -->
+			<xsl:attribute name="class">retweet</xsl:attribute>
+			
+			<blockquote cite="https://twitter.com/{retweeted_status/user/screen_name}/status/{retweeted_status/id}">
 				<xsl:apply-templates select="str:tokenize(retweeted_status/text,' ')" mode="tweet">
 					<xsl:with-param name="tweet" select="." />
 					<xsl:with-param name="opening-quote" select="$opening-quote" />
 					<xsl:with-param name="closing-quote" select="$closing-quote" />
 				</xsl:apply-templates>
-			</p>
-				
+			</blockquote>
+			
 			<!-- Reference -->
-			<xsl:call-template name="twitter-reference">
-				<xsl:with-param name="text" select="$retweeted" />
-				<xsl:with-param name="user" select="retweeted_status/user/screen_name" />
-				<xsl:with-param name="date" select="created_at" />
-				<xsl:with-param name="format" select="$format" />
-				<xsl:with-param name="link" select="concat('https://twitter.com/', user/screen_name, '/status/', id)" />
-			</xsl:call-template>
+			<footer>
+				<a href="https://twitter.com/{retweeted_status/user/screen_name}/status/{retweeted_status/id}" title="{retweeted_status/user/name}, @{retweeted_status/user/screen_name}">
+					<xsl:value-of select="retweeted_status/user/name" />
+					<xsl:text>, </xsl:text>
+					<xsl:call-template name="datetime-twitter">
+						<xsl:with-param name="date" select="retweeted_status/created_at" />
+						<xsl:with-param name="format" select="$format" />
+						<xsl:with-param name="lang" select="$lang" />
+					</xsl:call-template>
+				</a>
+			</footer>
 		</xsl:when>
 		
 		<!-- Original Tweet -->
 		<xsl:otherwise>
 			<p>
-			
-				<!-- Text -->
 				<xsl:apply-templates select="str:tokenize(text)" mode="tweet">
 					<xsl:with-param name="tweet" select="." />
 				</xsl:apply-templates>
 			</p>
 				
 			<!-- Reference -->
-			<xsl:call-template name="twitter-reference">
-				<xsl:with-param name="text" select="$tweeted" />
-				<xsl:with-param name="date" select="created_at" />
-				<xsl:with-param name="format" select="$format" />
-				<xsl:with-param name="link" select="concat('https://twitter.com/', user/screen_name, '/status/', id)" />
-			</xsl:call-template>
+			<footer>
+				<a href="https://twitter.com/{user/screen_name}/status/{id}" title="{user/name}, @{user/screen_name}">
+					<xsl:call-template name="datetime-twitter">
+						<xsl:with-param name="date" select="created_at" />
+						<xsl:with-param name="format" select="$format" />
+						<xsl:with-param name="lang" select="$lang" />
+					</xsl:call-template>
+				</a>
+			</footer>
 		</xsl:otherwise>			
 	</xsl:choose>
 </xsl:template>
@@ -220,29 +217,5 @@
 	<xsl:text> </xsl:text>
 </xsl:template>
 
-<!-- Reference -->
-<xsl:template name="twitter-reference">
-	<xsl:param name="text" />
-	<xsl:param name="user" />
-	<xsl:param name="date" />
-	<xsl:param name="format" />
-	<xsl:param name="link" />
-	
-	<xsl:variable name="replace-date">
-		<xsl:copy-of select="substring-before($text, '{$date}')" />
-		<xsl:call-template name="datetime-twitter">
-			<xsl:with-param name="date" select="$date" />
-			<xsl:with-param name="format" select="$format" />
-			<xsl:with-param name="lang" select="substring($ds-sprache, 1, 2)" />
-		</xsl:call-template>
-		<xsl:copy-of select="substring-after($text, '{$date}')" />
-	</xsl:variable>
-
-	<footer>
-		<a href="{$link}">
-			<xsl:value-of select="$replace-date" />
-		</a>
-	</footer>
-</xsl:template>
 
 </xsl:stylesheet>
