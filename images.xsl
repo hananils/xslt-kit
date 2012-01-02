@@ -5,8 +5,8 @@
 	RESIZE IMAGES
 	
 	- Author: Nils Hörrmann <http://nilshoerrmann.de>
-	- Version: 2.1
-	- Release date: 13th December 2011
+	- Version: 2.2
+	- Release date: 2nd January 2012
 	
 	# Example usage
 	
@@ -52,6 +52,10 @@
 	This template currently does not support external images.
 	
 	# Change log
+	
+	## Version 2.2
+	
+	- Add new template for URL generation
 	
 	## Version 2.1
 	
@@ -251,36 +255,14 @@
 	
 		<!-- Set source -->
 		<xsl:attribute name="src">
-			<xsl:value-of select="$root" />
-			<xsl:choose>
-			
-				<!-- Resize -->
-				<xsl:when test="$mode = 1">
-					<xsl:value-of select="concat('/image/1/', $jit-width, '/', $jit-height)" />
-				</xsl:when>
-				
-				<!-- Crop to fill -->
-				<xsl:when test="$mode = 2">
-					<xsl:value-of select="concat('/image/2/', $jit-width, '/', $jit-height, '/', $position)" />
-				</xsl:when>
-				
-				<!-- Resize canvas -->
-				<xsl:when test="$mode = 3">
-					<xsl:value-of select="concat('/image/2/', $jit-width, '/', $jit-height, '/', $position)" />
-					<xsl:if test="$background-color">
-						<xsl:value-of select="concat('/', $background-color)" />
-					</xsl:if>
-				</xsl:when>
-				
-				<!-- Direct display -->
-				<xsl:otherwise>
-					<xsl:text>/workspace/</xsl:text>
-				</xsl:otherwise>	
-			
-			</xsl:choose>
-			<xsl:value-of select="$image/@path" />
-			<xsl:text>/</xsl:text>
-			<xsl:value-of select="$image/filename" />
+			<xsl:call-template name="jit-url">
+				<xsl:with-param name="image" select="$image" />
+				<xsl:with-param name="mode" select="$mode" />
+				<xsl:with-param name="width" select="$jit-width" />
+				<xsl:with-param name="height" select="$jit-height" />
+				<xsl:with-param name="position" select="$position" />
+				<xsl:with-param name="background-color" select="$background-color" />
+			</xsl:call-template>
 		</xsl:attribute>
 		
 		<!-- Set class -->
@@ -290,6 +272,58 @@
 			</xsl:attribute>
 		</xsl:if>
 	</img>
+</xsl:template>
+
+<!-- Image URL -->
+<xsl:template name="jit-url">
+	<xsl:param name="image" />
+	<xsl:param name="mode" select="1" />
+	<xsl:param name="width" select="0" />
+	<xsl:param name="height" select="0" />
+	<xsl:param name="position" select="5" />
+	<xsl:param name="background-color" />
+
+	<!-- Root -->
+	<xsl:value-of select="$root" />
+	
+	<!-- Settings -->
+	<xsl:choose>
+	
+		<!-- Resize -->
+		<xsl:when test="$mode = 1">
+			<xsl:value-of select="concat('/image/1/', $width, '/', $height)" />
+		</xsl:when>
+		
+		<!-- Crop to fill -->
+		<xsl:when test="$mode = 2">
+			<xsl:value-of select="concat('/image/2/', $width, '/', $height, '/', $position)" />
+		</xsl:when>
+		
+		<!-- Resize canvas -->
+		<xsl:when test="$mode = 3">
+			<xsl:value-of select="concat('/image/3/', $width, '/', $height, '/', $position)" />
+			<xsl:text>/</xsl:text>
+			<xsl:choose>
+				<xsl:when test="$background-color != ''">
+					<xsl:value-of select="$background-color" />
+				</xsl:when>
+				<xsl:otherwise>fff</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		
+		<!-- Direct display -->
+		<xsl:otherwise>
+			<xsl:text>/workspace/</xsl:text>
+		</xsl:otherwise>	
+	
+	</xsl:choose>
+	
+	<!-- Path -->
+	<xsl:value-of select="$image/@path" />
+	<xsl:text>/</xsl:text>
+	
+	<!-- Filename -->
+	<xsl:value-of select="$image/filename" />
 </xsl:template>
 
 <!-- 
