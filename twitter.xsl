@@ -167,8 +167,8 @@
 	<xsl:param name="tweet" />
 	<xsl:variable name="user" select="$tweet/entities/user_mentions/user_mention[screen_name = substring-after(current(), '@')]" />
 
-	<em>@</em>
 	<a href="https://twitter.com/{$user/screen_name}" title="{$user/name}" class="username">
+		<em>@</em>
 		<xsl:value-of select="$user/screen_name" />
 	</a>
 	<xsl:text> </xsl:text>
@@ -179,8 +179,8 @@
 	<xsl:param name="tweet" />
 	<xsl:variable name="tag" select="substring-after(., '#')" />
 
-	<em>#</em>
 	<a href="https://twitter.com/search?q=%23{$tag}" class="hashtag">
+		<em>#</em>
 		<xsl:value-of select="$tag" />
 	</a>
 	<xsl:text> </xsl:text>
