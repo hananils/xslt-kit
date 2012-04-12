@@ -255,14 +255,25 @@
 	
 		<!-- Set source -->
 		<xsl:attribute name="src">
-			<xsl:call-template name="jit-url">
-				<xsl:with-param name="image" select="$image" />
-				<xsl:with-param name="mode" select="$mode" />
-				<xsl:with-param name="width" select="$jit-width" />
-				<xsl:with-param name="height" select="$jit-height" />
-				<xsl:with-param name="position" select="$position" />
-				<xsl:with-param name="background-color" select="$background-color" />
-			</xsl:call-template>
+			<xsl:choose>
+			
+				<!-- Original image -->
+				<xsl:when test="$jit-width = $image/meta/@width and $jit-height = $image/meta/@height">
+					<xsl:value-of select="concat($root, '/workspace', $image/@path, '/', $image/filename)" />
+				</xsl:when>
+				
+				<!-- Resized image -->
+				<xsl:otherwise>
+					<xsl:call-template name="jit-url">
+						<xsl:with-param name="image" select="$image" />
+						<xsl:with-param name="mode" select="$mode" />
+						<xsl:with-param name="width" select="$jit-width" />
+						<xsl:with-param name="height" select="$jit-height" />
+						<xsl:with-param name="position" select="$position" />
+						<xsl:with-param name="background-color" select="$background-color" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:attribute>
 		
 		<!-- Set class -->
