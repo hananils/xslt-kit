@@ -165,24 +165,59 @@
 <!-- Username -->
 <xsl:template match="token[starts-with(., '@')]" mode="tweet" priority="1">
 	<xsl:param name="tweet" />
-	<xsl:variable name="user" select="$tweet/entities/user_mentions/user_mention[screen_name = substring-after(current(), '@')]" />
+	
+	<!-- Extract username -->
+	<xsl:variable name="name">
+		<xsl:call-template name="plain">
+			<xsl:with-param name="string" select="current()" />
+		</xsl:call-template>
+	</xsl:variable>
+	<xsl:variable name="user" select="$tweet/entities/user_mentions/user_mention[screen_name = $name]" />
 
-	<a href="https://twitter.com/{$user/screen_name}" title="{$user/name}" class="username">
-		<em>@</em>
-		<xsl:value-of select="$user/screen_name" />
-	</a>
+	<!-- Link user -->
+	<xsl:choose>
+	
+		<!-- User name not found -->
+		<xsl:when test="count($user) = 0">
+			<a href="https://twitter.com/{$name}" title="{$name}" class="username">
+				<em>@</em>
+				<xsl:value-of select="$name" />
+			</a>
+		</xsl:when>
+		
+		<!-- Existing user -->
+		<xsl:otherwise>
+			<a href="https://twitter.com/{$user/screen_name}" title="{$user/name}" class="username">
+				<em>@</em>
+				<xsl:value-of select="$user/screen_name" />
+			</a>
+		</xsl:otherwise>
+	</xsl:choose>
+	
+	<!-- Add remaining string -->
+	<xsl:value-of select="substring-after(current(), $name)"/>
 	<xsl:text> </xsl:text>
 </xsl:template>
 
 <!-- Hashtag -->
 <xsl:template match="token[starts-with(., '#')]" mode="tweet" priority="1">
 	<xsl:param name="tweet" />
-	<xsl:variable name="tag" select="substring-after(., '#')" />
+	
+	<!-- Get plain tag -->
+	<xsl:variable name="tag">
+		<xsl:call-template name="plain">
+			<xsl:with-param name="string" select="current()" />
+		</xsl:call-template>
+	</xsl:variable>
 
+	<!-- Link tag -->
 	<a href="https://twitter.com/search?q=%23{$tag}" class="hashtag">
 		<em>#</em>
 		<xsl:value-of select="$tag" />
 	</a>
+	
+	<!-- Add remaining string -->
+	<xsl:value-of select="substring-after(current(), $tag)"/>
 	<xsl:text> </xsl:text>
 </xsl:template>
 
@@ -215,6 +250,21 @@
 		</xsl:otherwise>
 	</xsl:choose>
 	<xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Get plain value -->
+<xsl:template name="plain">
+	<xsl:param name="string" />
+	<xsl:variable name="apostroph">&apos;</xsl:variable>
+	<xsl:variable name="nopunctation" select="translate($string, '#@,;.:-_!/()=?´`', '')" />
+	<xsl:choose>
+		<xsl:when test="contains($nopunctation, $apostroph)">
+			<xsl:value-of select="substring-before($nopunctation, $apostroph)"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$nopunctation"/>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 
