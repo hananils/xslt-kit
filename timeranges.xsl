@@ -121,7 +121,7 @@
 		<xsl:when test="$start = $end or not($end)">
 	
 			<!-- Start date -->
-			<xsl:call-template name="format-date">
+			<xsl:call-template name="datetime">
 				<xsl:with-param name="date" select="$start" />
 				<xsl:with-param name="format" select="$dateformat-long" />
 				<xsl:with-param name="lang" select="$lang" />
@@ -130,14 +130,14 @@
 			<!-- Time -->
 			<xsl:if test="$start/@time != '00:00' and $show-time = true()">
 				<xsl:value-of select="$datetime-separator" />
-				<xsl:call-template name="format-date">
+				<xsl:call-template name="datetime">
 					<xsl:with-param name="date" select="$start" />
 					<xsl:with-param name="format" select="$timeformat" />
 					<xsl:with-param name="lang" select="$lang" />
 				</xsl:call-template>
 				<xsl:if test="$end">
 					<xsl:value-of select="$time-separator" />
-					<xsl:call-template name="format-date">
+					<xsl:call-template name="datetime">
 						<xsl:with-param name="date" select="$end" />
 						<xsl:with-param name="format" select="$timeformat" />
 						<xsl:with-param name="lang" select="$lang" />
@@ -150,7 +150,7 @@
 		<xsl:otherwise>
 	
 			<!-- Start date -->
-			<xsl:call-template name="format-date">
+			<xsl:call-template name="datetime">
 				<xsl:with-param name="date" select="$start" />
 				<xsl:with-param name="format" select="$dateformat-long" />
 				<xsl:with-param name="lang" select="$lang" />
@@ -159,7 +159,7 @@
 			<!-- Start time -->
 			<xsl:if test="$start/@time != '00:00' and $show-time = true()">
 				<xsl:value-of select="$datetime-separator" />
-				<xsl:call-template name="format-date">
+				<xsl:call-template name="datetime">
 					<xsl:with-param name="date" select="$start" />
 					<xsl:with-param name="format" select="$timeformat" />
 					<xsl:with-param name="lang" select="$lang" />
@@ -169,7 +169,7 @@
 			<!-- End date -->
 			<xsl:if test="$end">	
 				<xsl:value-of select="$date-separator" />
-				<xsl:call-template name="format-date">
+				<xsl:call-template name="datetime">
 					<xsl:with-param name="date" select="$end" />
 					<xsl:with-param name="format" select="$dateformat-long" />
 					<xsl:with-param name="lang" select="$lang" />
@@ -179,7 +179,7 @@
 			<!-- End time -->
 			<xsl:if test="$end/@time != '00:00' and $show-time = true()">
 				<xsl:value-of select="$datetime-separator" />
-				<xsl:call-template name="format-date">
+				<xsl:call-template name="datetime">
 					<xsl:with-param name="date" select="$end" />
 					<xsl:with-param name="format" select="$timeformat" />
 					<xsl:with-param name="lang" select="$lang" />
