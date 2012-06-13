@@ -22,9 +22,19 @@
 
 	# Optional Parameters:
 	
+	- format:           Number format, defaults to '#0'
 	- lang:             The language used, defaults to English
+	- highlight:        Highlight the numbers, defaults to false()
+	- connector:        Used to connect values, defaults to ", "
+	- last:             Used to connect the last two values, defaults to "and "
 	
 	# Change Log
+	
+	## Version 1.1
+	
+	- Added number format
+	- Added highlighting markup
+	- Added configurable connector
 	
 	## Version 1.0
 	
@@ -34,7 +44,22 @@
 <xsl:template name="timedistance">
 	<xsl:param name="start" />
 	<xsl:param name="end" />
-	<xsl:param name="lang" select="'en'"/>
+	<xsl:param name="format" select="'#0'" />
+	<xsl:param name="lang" select="'en'" />
+	<xsl:param name="highlight" select="false()" />
+	<xsl:param name="connector" select="', '" />
+	<xsl:param name="last" />
+	
+	<!-- Default connector -->
+	<xsl:variable name="and">
+		<xsl:choose>
+			<xsl:when test="$last != ''">
+				<xsl:value-of select="$last" />
+			</xsl:when>
+			<xsl:when test="$lang = 'de'"> und </xsl:when>
+			<xsl:otherwise> and </xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
 
 	<!-- Get relative time distance -->
 	<xsl:if test="$start != '' and $end != ''">
@@ -87,12 +112,6 @@
 					<xsl:choose>
 						<xsl:when test="$lang = 'de'">Tag</xsl:when>
 						<xsl:otherwise>day</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-				<xsl:variable name="and">
-					<xsl:choose>
-						<xsl:when test="$lang = 'de'">und</xsl:when>
-						<xsl:otherwise>and</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
 			
@@ -168,70 +187,88 @@
 					</xsl:choose>
 				</xsl:variable>
 				
-				<!-- Build string: years -->
-				<xsl:if test="$year-distance &gt; 0">
-					<xsl:value-of select="$year-distance" />
-					<xsl:text> </xsl:text>
-					<xsl:choose>
-						<xsl:when test="$year-distance = 1">
-							<xsl:value-of select="$year"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="$years"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-				
-				<!-- Build string: months -->
-				<xsl:if test="$month-distance &gt; 0">
-		
-					<!-- Separator -->
-					<xsl:if test="$year-distance != 0">
+				<!-- Build result -->
+				<xsl:variable name="result">
+					
+					<!-- Years -->
+					<xsl:if test="$year-distance &gt; 0">
+						<span class="years">
+							<xsl:value-of select="format-number($year-distance, $format)" />
+						</span>
+						<xsl:text> </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$day-distance = 0">
-								<xsl:text> </xsl:text>
-								<xsl:value-of select="$and" />
-								<xsl:text> </xsl:text>
+							<xsl:when test="$year-distance = 1">
+								<xsl:value-of select="$year"/>
 							</xsl:when>
-							<xsl:otherwise>, </xsl:otherwise>
+							<xsl:otherwise>
+								<xsl:value-of select="$years"/>
+							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
-				
+					
 					<!-- Months -->
-					<xsl:value-of select="$month-distance" />
-					<xsl:text> </xsl:text>
-					<xsl:choose>
-						<xsl:when test="$month-distance = 1">
-							<xsl:value-of select="$month"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="$months"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-				
-				<!-- Build string: days -->
-				<xsl:if test="$day-distance != 0">
-				
-					<!-- Separator -->
-					<xsl:if test="$year-distance != 0 or $month-distance != 0">
+					<xsl:if test="$month-distance &gt; 0">
+			
+						<!-- Separator -->
+						<xsl:if test="$year-distance != 0">
+							<xsl:choose>
+								<xsl:when test="$day-distance = 0">
+									<xsl:value-of select="$and" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="$connector" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:if>
+					
+						<!-- Months -->
+						<span class="months">
+							<xsl:value-of select="format-number($month-distance, $format)" />
+						</span>
 						<xsl:text> </xsl:text>
-						<xsl:value-of select="$and" />
-						<xsl:text> </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$month-distance = 1">
+								<xsl:value-of select="$month"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$months"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:if>
-		
+					
 					<!-- Days -->
-					<xsl:value-of select="$day-distance" />
-					<xsl:text> </xsl:text>
-					<xsl:choose>
-						<xsl:when test="$day-distance = 1">
-							<xsl:value-of select="$day"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="$days"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
+					<xsl:if test="$day-distance != 0">
+					
+						<!-- Separator -->
+						<xsl:if test="$year-distance != 0 or $month-distance != 0">
+							<xsl:value-of select="$and" />
+						</xsl:if>
+			
+						<!-- Days -->
+						<span class="days">
+							<xsl:value-of select="format-number($day-distance, $format)" />
+						</span>
+						<xsl:text> </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$day-distance = 1">
+								<xsl:value-of select="$day"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$days"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:if>
+				</xsl:variable>
+				
+				<!-- Return result -->
+				<xsl:choose>
+					<xsl:when test="$highlight = false()">
+						<xsl:value-of select="$result" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:copy-of select="$result" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:if>
