@@ -10,15 +10,27 @@
 	
 	# Example usage
 	
-	To do!
+		<xsl:call-template name="timerange">
+			<xsl:with-param name="start" select="date/start" />
+			<xsl:with-param name="end" select="date/end" />
+			<xsl:with-param name="show-time" select="false()" />
+		</xsl:call-template>						
 
 	# Required Parameters:
 
-	To do!
+	- start:            The start date as a Symphony date node
+   	- end:              The end date as a Symphony date node
 
 	# Optional Parameters:
 	
-	To do!
+	- show-time:        Show time, either true() or false(), defaults to true()
+	- lang:             The language used, either 'en' or 'de' (default)
+	- dateformat-long   Date format containing date and time
+	- dateformat-short  Date format containing only the date
+	- date-separator    
+	- time-separator    
+	- datetime-separator
+	- timeformat    
 	
 	# Requirements
 	
