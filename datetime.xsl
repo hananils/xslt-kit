@@ -206,6 +206,7 @@
 	<xsl:param name="lang" />
 	
 	<xsl:variable name="string" select="substring($format, 1, 1)" />
+	<xsl:variable name="dictionary" select="/data/datetime/language[@id = $lang] | /data/datetime/language[1]" />
 
 	<!-- Process date -->
 	<xsl:choose>
@@ -222,12 +223,12 @@
 		
 		<!-- Month as a full word, e. g. January, March, September -->
 		<xsl:when test="$string = 'M'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = number($month)]" />
+			<xsl:value-of select="$dictionary/months/month[@id = number($month)]" />
 		</xsl:when>
 		
 		<!-- Month in 3 letters, e. g. Jan, Mar, Sep -->
 		<xsl:when test="$string = 'm'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = number($month)]/@abbr" />
+			<xsl:value-of select="$dictionary/months/month[@id = number($month)]/@abbr" />
 		</xsl:when>
 		
 		<!-- Month in digits without leading zero -->
@@ -291,12 +292,12 @@
 		
 		<!-- Weekday as a full word, e. g. Monday, Tuesday -->
 		<xsl:when test="$string = 'W'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/weekdays/day[@id = $weekday]" />
+			<xsl:value-of select="$dictionary/weekdays/day[@id = $weekday]" />
 		</xsl:when>
 		
 		<!-- Weekday in 3 letters, e. g. Mon, Tue, Wed -->
 		<xsl:when test="$string = 'w'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/weekdays/day[@id = $weekday]/@abbr" />
+			<xsl:value-of select="$dictionary/weekdays/day[@id = $weekday]/@abbr" />
 		</xsl:when>
 		
 		<!-- Non-breaking space -->
