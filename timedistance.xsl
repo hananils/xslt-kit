@@ -317,9 +317,6 @@
 					
 						<!-- Separator -->
 						<xsl:if test="$year-distance != 0 or $month-distance != 0">
-							<xsl:value-of select="$and" />
-						</xsl:if>
-						<xsl:if test="$year-distance != 0 or $month-distance != 0">
 							<xsl:choose>
 								<xsl:when test="$start-hour != -1">
 									<xsl:value-of select="$and" />
