@@ -338,5 +338,55 @@
 	</xsl:if>
 </xsl:template>
 
+<!--
+	COMPARE DATES
+	
+	# Example usage
+	
+		<xsl:call-template name="compare-dates">
+			<xsl:with-param name="first" select="'1980-07-17'" />
+			<xsl:with-param name="second" select="'1983-07-21'" />
+			<xsl:with-param name="is" select="'<'" />
+		</xsl:call-template>	
+	
+	# Required Parameters:
+
+	- first:             First date, formatted as YYYY-MM-DD
+	- second:            Second date, formatted as YYYY-MM-DD
+	- is:                Operator, defaults to '='
+	
+	# Optional Parameters:
+	
+	- first-time:        Time of the first date
+	- second-time:       Time of the second date
+-->
+<xsl:template name="compare-dates">
+	<xsl:param name="first" />
+	<xsl:param name="second" />
+	<xsl:param name="first-time" />
+	<xsl:param name="second-time" />
+	<xsl:param name="is" select="'='" />
+	
+	<xsl:variable name="first-stamp" select="concat(translate($first, '-', ''), translate($first-time, ':', ''))" />
+	<xsl:variable name="second-stamp" select="concat(translate($second, '-', ''), translate($second-time, ':', ''))" />
+	
+	<xsl:choose>
+		<xsl:when test="$is = 'earlier than' or $is = '&lt;'">
+			<xsl:value-of select="boolean($first-stamp &lt; $second-stamp)" />
+		</xsl:when>
+		<xsl:when test="$is = 'equal to or earlier than' or $is = '&lt;='">
+			<xsl:value-of select="boolean($first-stamp &lt;= $second-stamp)" />
+		</xsl:when>
+		<xsl:when test="$is = '=' or $is = 'equal to'">
+			<xsl:value-of select="boolean($first-stamp = $second-stamp)" />
+		</xsl:when>
+		<xsl:when test="$is = 'equal to or later than' or $is = '&gt;='">
+			<xsl:value-of select="boolean($first-stamp &gt;= $second-stamp)" />
+		</xsl:when>
+		<xsl:when test="$is = 'later than' or $is = '&gt;'">
+			<xsl:value-of select="boolean($first-stamp &gt; $second-stamp)" />
+		</xsl:when>
+	</xsl:choose>
+</xsl:template>
 
 </xsl:stylesheet>
