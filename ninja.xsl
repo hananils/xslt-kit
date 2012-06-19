@@ -36,11 +36,19 @@
 
 <xsl:template match="//*" mode="ninja">
 	<xsl:param name="level" select="0" />
+	<xsl:param name="class" />
 	<xsl:param name="prefix" />
 	<xsl:param name="suffix" />
 	
 	<!-- Create element -->
 	<xsl:element name="{name()}">
+	
+		<!-- Class -->
+		<xsl:if test="$class != ''">
+			<xsl:attribute name="class">
+				<xsl:value-of select="$class" />
+			</xsl:attribute>
+		</xsl:if>
 		
 		<!-- Prefix -->
 		<xsl:copy-of select="$prefix" />
