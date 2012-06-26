@@ -389,4 +389,42 @@
 	</xsl:choose>
 </xsl:template>
 
+<!--
+	DATE IN RANGE
+	
+	# Example usage
+	
+		<xsl:call-template name="date-in-range">
+			<xsl:with-param name="date" select="'1983-07-21'" />
+			<xsl:with-param name="start" select="'1980-07-17'" />
+			<xsl:with-param name="end" select="'2012-08-04'" />
+		</xsl:call-template>	
+	
+	# Required Parameters:
+
+	- date:              Date to check, formatted as YYYY-MM-DD
+	- start:             Start date of range, formatted as YYYY-MM-DD
+	- end:               End date of range, formatted as YYYY-MM-DD
+	
+	# Optional Parameters:
+	
+	- date-time:         Time of the date to check
+	- start-time:        Start time of the range
+	- end-time:          End time of the range
+-->
+<xsl:template name="date-in-range">
+	<xsl:param name="date" />
+	<xsl:param name="start" />
+	<xsl:param name="end" />
+	<xsl:param name="date-time" />
+	<xsl:param name="start-time" />
+	<xsl:param name="end-time" />
+	
+	<xsl:variable name="date-stamp" select="concat(translate($date, '-', ''), translate($date-time, ':', ''))" />
+	<xsl:variable name="start-stamp" select="concat(translate($start, '-', ''), translate($start-time, ':', ''))" />
+	<xsl:variable name="end-stamp" select="concat(translate($end, '-', ''), translate($end-time, ':', ''))" />
+	
+	<xsl:value-of select="boolean($date-stamp &gt;= $start-stamp and $date-stamp &lt;= $end-stamp)" />
+</xsl:template>
+
 </xsl:stylesheet>
