@@ -25,6 +25,7 @@
 	- start-time        Start time as string, formatted as hh:mm
 	- end-time          End time as string, formatted as hh:mm
 	- full-time         Display hours and minutes, boolean, defaults to false()
+	- show-zero         Specifies which zero numbers are displayed, e. g. 'ymd' to display zero years, months and days
 	- format:           Number format, defaults to '#0'
 	- lang:             The language used, defaults to English
 	- highlight:        Highlight the numbers, boolean, defaults to false()
@@ -32,6 +33,10 @@
 	- last:             Used to connect the last two values, defaults to "and "
 	
 	# Change Log
+	
+	## Version 1.3
+	
+	- Allow zero numbers
 	
 	## Version 1.2
 	
@@ -54,6 +59,7 @@
 	<xsl:param name="start-time" select="'-01:00'" />
 	<xsl:param name="end-time" select="'-01:00'" />
 	<xsl:param name="full-time" select="false()" />
+	<xsl:param name="show-zero" select="''"/>
 	<xsl:param name="format" select="'#0'" />
 	<xsl:param name="lang" select="'en'" />
 	<xsl:param name="highlight" select="false()" />
@@ -267,7 +273,7 @@
 				<xsl:variable name="result">
 					
 					<!-- Years -->
-					<xsl:if test="$year-distance &gt; 0">
+					<xsl:if test="$year-distance &gt; 0 or contains($show-zero, 'y')">
 						<span class="years">
 							<xsl:value-of select="format-number($year-distance, $format)" />
 						</span>
@@ -283,10 +289,10 @@
 					</xsl:if>
 					
 					<!-- Months -->
-					<xsl:if test="$month-distance &gt; 0">
+					<xsl:if test="$month-distance &gt; 0 or contains($show-zero, 'm')">
 			
 						<!-- Separator -->
-						<xsl:if test="$year-distance != 0">
+						<xsl:if test="$year-distance != 0 or contains($show-zero, 'y')">
 							<xsl:choose>
 								<xsl:when test="$day-distance = 0">
 									<xsl:value-of select="$and" />
@@ -313,10 +319,10 @@
 					</xsl:if>
 					
 					<!-- Days -->
-					<xsl:if test="$day-distance != 0">
+					<xsl:if test="$day-distance != 0 or contains($show-zero, 'd')">
 					
 						<!-- Separator -->
-						<xsl:if test="$year-distance != 0 or $month-distance != 0">
+						<xsl:if test="$year-distance != 0 or $month-distance != 0 or contains($show-zero, 'y') or contains($show-zero, 'm')">
 							<xsl:choose>
 								<xsl:when test="$start-hour != -1">
 									<xsl:value-of select="$and" />
@@ -346,7 +352,7 @@
 					<xsl:if test="$start-hour != -1">
 					
 						<!-- Separator -->
-						<xsl:if test="$year-distance != 0 or $month-distance != 0 or $day-distance != 0">
+						<xsl:if test="$year-distance != 0 or $month-distance != 0 or $day-distance != 0 or contains($show-zero, 'y') or contains($show-zero, 'm') or contains($show-zero, 'd')">
 							<xsl:choose>
 								<xsl:when test="$full-time = false()">
 									<xsl:value-of select="$and" />
