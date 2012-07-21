@@ -51,7 +51,9 @@
 		</xsl:if>
 		
 		<!-- Prefix -->
-		<xsl:copy-of select="$prefix" />
+		<xsl:if test="position() = 1">
+			<xsl:copy-of select="$prefix" />
+		</xsl:if>
 	
 		<!-- Apply templates for inline elements, attributes and text nodes -->
 		<xsl:apply-templates select="* | @* | text()" mode="ninja">
@@ -59,7 +61,9 @@
 		</xsl:apply-templates>
 		
 		<!-- Suffix -->
-		<xsl:copy-of select="$suffix" />
+		<xsl:if test="position() = last()">
+			<xsl:copy-of select="$suffix" />
+		</xsl:if>
 	</xsl:element>
 </xsl:template>
 
