@@ -1,11 +1,9 @@
-# XSLT Kit for Symphony
+# XSLT Kit
 
-- Author: hana+nils · Büro für Web- und Textgestaltung <http://hananils.de>
-- Github Repository: <https://github.com/hananils/kit>
+_by [hana+nils · Büro für Web- und Textgestaltung](http://hananils.de)_
+_[github.com/hananils/kit](https://github.com/hananils/kit)
 
-## Overview
-
-This is a growing collection of XSL templates we often use for our Symphony projects. Please have a look at each template for documentation and detailed author information.
+This is a growing collection of XSL templates we often use for our [Symphony](http://getsymphony.com) projects. Please have a look at each template for documentation and detailed author information. We are constantly updating or adding templates. Feel free to fork the repository and contribute to this library.
 
 ## Copy and Paste
 
@@ -18,10 +16,6 @@ This is a growing collection of XSL templates we often use for our Symphony proj
 	<xsl:import href="kit/timeranges.xsl" />
 	<xsl:import href="kit/twitter.xsl" />
 	
-## Enhancements
-
-We are constantly updating or adding templates. Feel free to fork the repository and contribute to this library.
-
 # Licence
 
 All templates included in this XSLT Kit are, unless otherwise specified, released under the MIT licence as follows:
