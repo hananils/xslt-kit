@@ -1,7 +1,7 @@
 # XSLT Kit
 
-_by [hana+nils · Büro für Web- und Textgestaltung](http://hananils.de)_
-_[github.com/hananils/kit](https://github.com/hananils/kit)
+_by [hana+nils · Büro für Web- und Textgestaltung](http://hananils.de)_  
+_[github.com/hananils/kit](https://github.com/hananils/kit)_
 
 This is a growing collection of XSL templates we often use for our [Symphony](http://getsymphony.com) projects. Please have a look at each template for documentation and detailed author information. We are constantly updating or adding templates. Feel free to fork the repository and contribute to this library.
 
