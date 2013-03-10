@@ -65,7 +65,7 @@
 	<xsl:param name="class-next" select="'next'" />
 	<xsl:param name="class-previous" select="'previous'" />
 	<xsl:param name="class-selected" select="'selected'" />
-	<xsl:param name="class-elipsis" select="'elipsis'" />
+	<xsl:param name="class-elipsis" select="'ellipsis'" />
 	<xsl:param name="class-disabled" select="'disabled'" />
 
 	<!-- Only show pagination if there are more than one page -->
