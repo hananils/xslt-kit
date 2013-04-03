@@ -308,8 +308,8 @@
 		<!-- Crop to fill -->
 		<xsl:when test="$mode = 2">
 			<xsl:value-of select="concat('/image/2/', $width, '/', $height, '/', $position)" />
-			<xsl:text>/</xsl:text>
 			<xsl:if test="$background-color != ''">
+				<xsl:text>/</xsl:text>
 				<xsl:value-of select="$background-color" />
 			</xsl:if>
 		</xsl:when>
