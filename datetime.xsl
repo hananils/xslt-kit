@@ -13,7 +13,7 @@
 	
 		<xsl:call-template name="datetime">
 			<xsl:with-param name="date" select="date" />
-		</xsl:call-template>	
+		</xsl:call-template>
 	
 	# Required Parameters:
 
@@ -206,7 +206,7 @@
 	<xsl:param name="lang" />
 	
 	<xsl:variable name="string" select="substring($format, 1, 1)" />
-	<xsl:variable name="dictionary" select="/data/datetime/language[@id = $lang] | /data/datetime/language[1]" />
+	<xsl:variable name="dictionary" select="/data/datetime/language[@id = $lang]" />
 
 	<!-- Process date -->
 	<xsl:choose>
@@ -347,7 +347,7 @@
 			<xsl:with-param name="first" select="'1980-07-17'" />
 			<xsl:with-param name="second" select="'1983-07-21'" />
 			<xsl:with-param name="is" select="'<'" />
-		</xsl:call-template>	
+		</xsl:call-template>
 	
 	# Required Parameters:
 
@@ -398,7 +398,7 @@
 			<xsl:with-param name="date" select="'1983-07-21'" />
 			<xsl:with-param name="start" select="'1980-07-17'" />
 			<xsl:with-param name="end" select="'2012-08-04'" />
-		</xsl:call-template>	
+		</xsl:call-template>
 	
 	# Required Parameters:
 
