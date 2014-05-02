@@ -13,7 +13,7 @@
 		<xsl:call-template name="timedistance">
 			<xsl:with-param name="start" select="'2011-07-17'" />
 			<xsl:with-param name="end" select="'2011-08-04'" />
-		</xsl:call-template>	
+		</xsl:call-template>
 
 	# Required Parameters:
 
@@ -87,7 +87,7 @@
 					<xsl:with-param name="start" select="$end" />
 					<xsl:with-param name="end" select="$start" />
 					<xsl:with-param name="lang" select="$lang" />
-				</xsl:call-template>	
+				</xsl:call-template>
 			</xsl:when>
 			
 			<!-- Process dates -->
@@ -173,7 +173,7 @@
 					<xsl:choose>
 						<xsl:when test="($year-difference &gt; 0 and $start-month &gt; $end-month) or ($year-difference &gt; 0 and $start-month &gt; $end-month and $start-day &gt; $end-day)">1</xsl:when>
 						<xsl:otherwise>0</xsl:otherwise>
-					</xsl:choose>		
+					</xsl:choose>
 				</xsl:variable>
 				<xsl:variable name="year-distance" select="$year-difference - $year-correction" />
 				
@@ -192,7 +192,7 @@
 					<xsl:choose>
 						<xsl:when test="$month-difference &gt; 0 and $start-day &gt; $end-day">1</xsl:when>
 						<xsl:otherwise>0</xsl:otherwise>
-					</xsl:choose>		
+					</xsl:choose>
 				</xsl:variable>
 				<xsl:variable name="month-distance" select="$month-difference - $month-correction" />
 				
@@ -346,7 +346,7 @@
 								<xsl:value-of select="$days"/>
 							</xsl:otherwise>
 						</xsl:choose>
-					</xsl:if>	
+					</xsl:if>
 									
 					<!-- Hours -->
 					<xsl:if test="$start-hour != -1">

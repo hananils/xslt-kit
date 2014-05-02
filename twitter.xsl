@@ -122,7 +122,7 @@
 					</xsl:call-template>
 				</a>
 			</footer>
-		</xsl:otherwise>			
+		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
 
@@ -172,7 +172,7 @@
 			<xsl:with-param name="string" select="current()" />
 		</xsl:call-template>
 	</xsl:variable>
-	<xsl:variable name="user" select="$tweet/entities/user_mentions/user_mention[screen_name = $name]" />
+	<xsl:variable name="user" select="$tweet//user_mention[screen_name = $name]" />
 
 	<!-- Link user -->
 	<xsl:choose>
@@ -224,8 +224,8 @@
 <!-- Link -->
 <xsl:template match="token[starts-with(., 'http')]" mode="tweet" priority="1">
 	<xsl:param name="tweet" />
-	<xsl:variable name="url" select="$tweet/entities/urls/url[url = current()]" />
-	<xsl:variable name="url-mix" select="$tweet/entities/urls/url[starts-with(current(), url)]" />
+	<xsl:variable name="url" select="$tweet//*[url = current()]" />
+	<xsl:variable name="url-mix" select="$tweet//*[starts-with(current(), url)]" />
 
 	<xsl:choose>
 		

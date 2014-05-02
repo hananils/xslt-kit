@@ -20,7 +20,7 @@
 							
 	# Options
 	
-	- image:             A Symphony image node containing image path, 
+	- image:             A Symphony image node containing image path,
 	                     filename and meta information
 	- mode:              Resize mode, either nummeric or string
 	                     - direct display: 0 or empty
@@ -31,7 +31,7 @@
 	- height:            Target height, nummeric
 	- position:          Canvas position, nummeric
 	- background-color:  Optional for mode 3, hex
-	- link:              Link back to original image, either true() or false()	
+	- link:              Link back to original image, either true() or false()
 	- alt:               Optional alternative text, string
 	- title:             Optional title, string
 	- class:             Optional class name, string
@@ -42,7 +42,7 @@
 	
 		data-width="615" data-height="250"
 	
-	This can be used as object for futher JavaScript processing when 
+	This can be used as object for futher JavaScript processing when
 	generating an image gallery.
 	
 	If either width or height of the resized image are missing, these values are automatically calculated based on the original dimensions.
@@ -138,7 +138,7 @@
 					<xsl:with-param name="title" select="$title" />
 					<xsl:with-param name="class" select="$class" />
 				</xsl:call-template>
-			</xsl:otherwise>	
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
 	
@@ -329,7 +329,7 @@
 		<!-- Direct display -->
 		<xsl:otherwise>
 			<xsl:text>/workspace/</xsl:text>
-		</xsl:otherwise>	
+		</xsl:otherwise>
 	
 	</xsl:choose>
 	
@@ -341,7 +341,7 @@
 	<xsl:value-of select="$image/filename" />
 </xsl:template>
 
-<!-- 
+<!--
 	Calculate missing dimension
 -->
 <xsl:template name="jit-calculate-dimension">

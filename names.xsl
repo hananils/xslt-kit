@@ -94,7 +94,7 @@
 				<xsl:otherwise>
 					<xsl:value-of select="$person/suffix" />
 				</xsl:otherwise>
-			</xsl:choose>		
+			</xsl:choose>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
@@ -133,7 +133,7 @@
 			<xsl:when test="position() != 1 and position() = last() and $static = ''">
 				<xsl:value-of select="$last" />
 			</xsl:when>
-		</xsl:choose>	
+		</xsl:choose>
 
 		<!-- Get name -->
 		<xsl:choose>

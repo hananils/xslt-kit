@@ -14,7 +14,7 @@
 			<xsl:with-param name="start" select="date/start" />
 			<xsl:with-param name="end" select="date/end" />
 			<xsl:with-param name="show-time" select="false()" />
-		</xsl:call-template>						
+		</xsl:call-template>
 
 	# Required Parameters:
 
@@ -27,10 +27,10 @@
 	- lang:             The language used, either 'en' or 'de' (default)
 	- dateformat-long   Date format containing date and time
 	- dateformat-short  Date format containing only the date
-	- date-separator    
-	- time-separator    
+	- date-separator
+	- time-separator
 	- datetime-separator
-	- timeformat    
+	- timeformat
 	
 	# Requirements
 	
@@ -112,7 +112,7 @@
 			</xsl:choose>
 		</xsl:otherwise>
 	</xsl:choose>
-</xsl:template>	
+</xsl:template>
 	
 <xsl:template name="time-formatter">
 	<xsl:param name="start" />
@@ -155,7 +155,7 @@
 						<xsl:with-param name="lang" select="$lang" />
 					</xsl:call-template>
 				</xsl:if>
-			</xsl:if>	
+			</xsl:if>
 		</xsl:when>
 		
 		<!-- Different day -->
@@ -176,10 +176,10 @@
 					<xsl:with-param name="format" select="$timeformat" />
 					<xsl:with-param name="lang" select="$lang" />
 				</xsl:call-template>
-			</xsl:if>	
+			</xsl:if>
 			
 			<!-- End date -->
-			<xsl:if test="$end">	
+			<xsl:if test="$end">
 				<xsl:value-of select="$date-separator" />
 				<xsl:call-template name="datetime">
 					<xsl:with-param name="date" select="$end" />
@@ -196,7 +196,7 @@
 					<xsl:with-param name="format" select="$timeformat" />
 					<xsl:with-param name="lang" select="$lang" />
 				</xsl:call-template>
-			</xsl:if>	
+			</xsl:if>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
@@ -228,7 +228,7 @@
 			<xsl:when test="position() != 1 and position() = last()">
 				<xsl:value-of select="$last" />
 			</xsl:when>
-		</xsl:choose>	
+		</xsl:choose>
 		
 		<!-- Format name -->
 		<xsl:call-template name="timerange">

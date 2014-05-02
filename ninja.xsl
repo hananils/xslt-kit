@@ -68,7 +68,7 @@
 </xsl:template>
 
 <!--
-	Attributes 
+	Attributes
 -->
 <xsl:template match="//@*" mode="ninja">
 	<xsl:attribute name="{name(.)}">
@@ -77,7 +77,7 @@
 </xsl:template>
 
 <!--
-	Headlines 
+	Headlines
 -->
 <xsl:template match="h1 | h2 | h3 | h4" mode="ninja" priority="1">
 	<xsl:param name="level" select="0" />
