@@ -83,76 +83,78 @@
 	<xsl:param name="class" />
 	
 	<!-- Get Image -->
-	<xsl:variable name="resized-image">
-		<xsl:choose>
+	<xsl:if test="image != ''">
+		<xsl:variable name="resized-image">
+			<xsl:choose>
+			
+				<!-- Resize -->
+				<xsl:when test="$mode = 'resize' or $mode = 1">
+					<xsl:call-template name="jit-resize">
+						<xsl:with-param name="image" select="$image" />
+						<xsl:with-param name="mode" select="1" />
+						<xsl:with-param name="width" select="$width" />
+						<xsl:with-param name="height" select="$height" />
+						<xsl:with-param name="alt" select="$alt" />
+						<xsl:with-param name="title" select="$title" />
+						<xsl:with-param name="class" select="$class" />
+					</xsl:call-template>
+				</xsl:when>
+				
+				<!-- Crop to fill -->
+				<xsl:when test="$mode = 'crop' or $mode = 2">
+					<xsl:call-template name="jit-resize">
+						<xsl:with-param name="image" select="$image" />
+						<xsl:with-param name="mode" select="2" />
+						<xsl:with-param name="width" select="$width" />
+						<xsl:with-param name="height" select="$height" />
+						<xsl:with-param name="position" select="$position" />
+						<xsl:with-param name="alt" select="$alt" />
+						<xsl:with-param name="title" select="$title" />
+						<xsl:with-param name="class" select="$class" />
+					</xsl:call-template>
+				
+				</xsl:when>
+				
+				<!-- Resize canvas -->
+				<xsl:when test="$mode = 'resize-crop' or $mode = 3">
+					<xsl:call-template name="jit-resize">
+						<xsl:with-param name="image" select="$image" />
+						<xsl:with-param name="mode" select="3" />
+						<xsl:with-param name="width" select="$width" />
+						<xsl:with-param name="height" select="$height" />
+						<xsl:with-param name="position" select="$position" />
+						<xsl:with-param name="background-color" select="$background-color" />
+						<xsl:with-param name="alt" select="$alt" />
+						<xsl:with-param name="title" select="$title" />
+						<xsl:with-param name="class" select="$class" />
+					</xsl:call-template>
+				</xsl:when>
+				
+				<!-- Direct display -->
+				<xsl:otherwise>
+					<xsl:call-template name="jit-resize">
+						<xsl:with-param name="image" select="$image" />
+						<xsl:with-param name="mode" select="0" />
+						<xsl:with-param name="alt" select="$alt" />
+						<xsl:with-param name="title" select="$title" />
+						<xsl:with-param name="class" select="$class" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		
-			<!-- Resize -->
-			<xsl:when test="$mode = 'resize' or $mode = 1">
-				<xsl:call-template name="jit-resize">
-					<xsl:with-param name="image" select="$image" />
-					<xsl:with-param name="mode" select="1" />
-					<xsl:with-param name="width" select="$width" />
-					<xsl:with-param name="height" select="$height" />
-					<xsl:with-param name="alt" select="$alt" />
-					<xsl:with-param name="title" select="$title" />
-					<xsl:with-param name="class" select="$class" />
-				</xsl:call-template>
+		<!-- Link image -->
+		<xsl:choose>
+			<xsl:when test="$link != false()">
+				<a href="{$workspace}{$image/@path}/{$image/filename}">
+					<xsl:copy-of select="$resized-image" />
+				</a>
 			</xsl:when>
-			
-			<!-- Crop to fill -->
-			<xsl:when test="$mode = 'crop' or $mode = 2">
-				<xsl:call-template name="jit-resize">
-					<xsl:with-param name="image" select="$image" />
-					<xsl:with-param name="mode" select="2" />
-					<xsl:with-param name="width" select="$width" />
-					<xsl:with-param name="height" select="$height" />
-					<xsl:with-param name="position" select="$position" />
-					<xsl:with-param name="alt" select="$alt" />
-					<xsl:with-param name="title" select="$title" />
-					<xsl:with-param name="class" select="$class" />
-				</xsl:call-template>
-			
-			</xsl:when>
-			
-			<!-- Resize canvas -->
-			<xsl:when test="$mode = 'resize-crop' or $mode = 3">
-				<xsl:call-template name="jit-resize">
-					<xsl:with-param name="image" select="$image" />
-					<xsl:with-param name="mode" select="3" />
-					<xsl:with-param name="width" select="$width" />
-					<xsl:with-param name="height" select="$height" />
-					<xsl:with-param name="position" select="$position" />
-					<xsl:with-param name="background-color" select="$background-color" />
-					<xsl:with-param name="alt" select="$alt" />
-					<xsl:with-param name="title" select="$title" />
-					<xsl:with-param name="class" select="$class" />
-				</xsl:call-template>
-			</xsl:when>
-			
-			<!-- Direct display -->
 			<xsl:otherwise>
-				<xsl:call-template name="jit-resize">
-					<xsl:with-param name="image" select="$image" />
-					<xsl:with-param name="mode" select="0" />
-					<xsl:with-param name="alt" select="$alt" />
-					<xsl:with-param name="title" select="$title" />
-					<xsl:with-param name="class" select="$class" />
-				</xsl:call-template>
+				<xsl:copy-of select="$resized-image" />
 			</xsl:otherwise>
 		</xsl:choose>
-	</xsl:variable>
-	
-	<!-- Link image -->
-	<xsl:choose>
-		<xsl:when test="$link != false()">
-			<a href="{$workspace}{$image/@path}/{$image/filename}">
-				<xsl:copy-of select="$resized-image" />
-			</a>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:copy-of select="$resized-image" />
-		</xsl:otherwise>
-	</xsl:choose>
+	</xsl:if>
 </xsl:template>
 
 <!--
