@@ -83,7 +83,7 @@
 	<xsl:param name="class" />
 	
 	<!-- Get Image -->
-	<xsl:if test="image != ''">
+	<xsl:if test="$image != ''">
 		<xsl:variable name="resized-image">
 			<xsl:choose>
 			
