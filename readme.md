@@ -9,7 +9,6 @@ This is a growing collection of XSL templates we often use for our [Symphony](ht
 
 	<xsl:import href="kit/datetime.xsl" />
 	<xsl:import href="kit/images.xsl" />
-	<xsl:import href="kit/names.xsl" />
 	<xsl:import href="kit/ninja.xsl" />
 	<xsl:import href="kit/pagination.xsl" />
 	<xsl:import href="kit/timedistance.xsl" />
