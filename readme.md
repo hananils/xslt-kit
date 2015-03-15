@@ -15,6 +15,7 @@ This is a growing collection of XSL templates we often use for our [Symphony](ht
 	<xsl:import href="kit/timedistance.xsl" />
 	<xsl:import href="kit/timeranges.xsl" />
 	<xsl:import href="kit/twitter.xsl" />
+	<xsl:import href="kit/videoembed.xsl" />
 	
 # Licence
 
