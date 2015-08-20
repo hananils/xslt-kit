@@ -3,28 +3,28 @@
 
 <!--
 	DATE AND TIME
-	
+
 	- Author: Nils Hörrmann <http://nilshoerrmann.de> based on a utility by Allen Chang <http://chaoticpattern.com>
 	- See: <http://symphony-cms.com/download/xslt-utilities/view/20506/>
 	- Version: 2.1
 	- Release date: 13th December 2011
-	
+
 	# Example usage
-	
+
 		<xsl:call-template name="datetime">
 			<xsl:with-param name="date" select="date" />
 		</xsl:call-template>
-	
+
 	# Required Parameters:
 
 	- date:              Expects a Symphony date node (as provided by the core date field or the Date and Time extension)
-	
+
 	# Optional Parameters:
-	
+
 	- time:              Takes an time string (12:30), defaults to $date/@time
 	- weekday:           Takes a number (monday = 1, tuesday = 2 ...), defaults to $date/@weekday
 	- format:            Takes a format string with the following options:
-	
+
 	                     Y: Year in 4 digits, e. g. 1981, 1992, 2008
 	                     y: Year in 2 digits, e. g. 81, 92, 08
 	                     M: Month as a full word, e. g. January, March, September
@@ -41,36 +41,36 @@
 	                     w: Weekday in 3 letters, e. g. Mon, Tue, Wed
 	                     rfc2822: RFC 2822 formatted date
 	                     iso8601: ISO 8601 formatted date
-				
+
 	- lang:              Takes a language name, e. g. 'en', 'de'
 
 	# Special characters
-	
+
 	- A backslash used in date formats escapes the following character.
 	- An underscore represents a non-breakable space.
-	
+
 	# Month names and weekdays
-	
+
 	For month names and weekdays a special data source, data.datetime.php, is needed. It is bundled with the Date and Time extension, see: <https://github.com/nilshoerrmann/datetime/blob/master/data-sources/data.datetime.php>
-	
+
 	# Change log
-	
+
 	## Version 2.1
-	
+
 	- Bug fixes
-	
+
 	## Version 2.0
-	
+
 	- Simplified templates
 	- Renamed main template from `format-date` to `datetime` for consistency reasons within the kit
 	- Removed timezone for now (this should be reintroduced as full timezone support)
-	
+
 	## Version 1.1
-	
+
 	- A few cosmetic updates
-	
+
 	## Version 1.0
-	
+
 	- Initial release
 -->
 
@@ -83,7 +83,7 @@
 	<xsl:param name="date" />
 	<xsl:param name="format" select="'m D, Y'" />
 	<xsl:param name="lang" select="'en'" />
-	
+
 	<!-- Parse date -->
 	<xsl:variable name="year" select="substring($date, 1, 4)" />
 	<xsl:variable name="month" select="substring($date, 6, 2)" />
@@ -116,7 +116,7 @@
 	<xsl:variable name="day" select="substring($date, 9, 2)" />
 	<xsl:variable name="time" select="substring($date, 12, 5)" />
 	<xsl:variable name="weekday" select="/data/datetime/language[@id = 'en']/weekdays/weekday[@abbr = substring($date, 1, 3)]/@id" />
-	
+
 	<!-- Format date -->
 	<xsl:call-template name="datetime-formatter">
 		<xsl:with-param name="year" select="$year" />
@@ -140,7 +140,7 @@
 	<xsl:variable name="month" select="substring($date, 6, 2)" />
 	<xsl:variable name="day" select="substring($date, 9, 2)" />
 	<xsl:variable name="time" select="substring($date, 12, 5)" />
-	
+
 	<!-- Format date -->
 	<xsl:call-template name="datetime-formatter">
 		<xsl:with-param name="year" select="$year" />
@@ -163,24 +163,24 @@
 	<xsl:param name="weekday" />
 	<xsl:param name="format" />
 	<xsl:param name="lang" select="'en'" />
-	
+
 	<!-- Get format -->
 	<xsl:variable name="datetime-format">
 		<xsl:choose>
 
 			<!-- RFC 2822: Thu, 17 Jul 1980 17:59:00 +0100 -->
 			<xsl:when test="$format = 'rfc2822' ">w, d m Y T:00 -0000</xsl:when>
-			
+
 			<!-- ISO 8601: 1980-07-17T17:59:00+01:00 -->
 			<xsl:when test="$format = 'iso8601' ">Y-n-d\TT:00-00:00</xsl:when>
-			
+
 			<!-- Custom date format -->
 			<xsl:otherwise>
 				<xsl:value-of select="$format"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	
+
 	<!-- Format date -->
 	<xsl:call-template name="datetime-processor">
 		<xsl:with-param name="year" select="$year" />
@@ -204,38 +204,38 @@
 	<xsl:param name="weekday" />
 	<xsl:param name="format" />
 	<xsl:param name="lang" />
-	
+
 	<xsl:variable name="string" select="substring($format, 1, 1)" />
 	<xsl:variable name="dictionary" select="/data/datetime/language[@id = $lang] | /data/datetime/language[1]" />
 
 	<!-- Process date -->
 	<xsl:choose>
-	
+
 		<!-- Year in 4 digits, e. g. 1981, 1992, 2008 -->
 		<xsl:when test="$string = 'Y'">
 			<xsl:value-of select="$year" />
 		</xsl:when>
-		
+
 		<!-- Year in 2 digits, e. g. 81, 92, 08 -->
 		<xsl:when test="$string = 'y'">
 			<xsl:value-of select="substring($year, 3)" />
 		</xsl:when>
-		
+
 		<!-- Month as a full word, e. g. January, March, September -->
 		<xsl:when test="$string = 'M'">
 			<xsl:value-of select="$dictionary/months/month[@id = number($month)]" />
 		</xsl:when>
-		
+
 		<!-- Month in 3 letters, e. g. Jan, Mar, Sep -->
 		<xsl:when test="$string = 'm'">
 			<xsl:value-of select="$dictionary/months/month[@id = number($month)]/@abbr" />
 		</xsl:when>
-		
+
 		<!-- Month in digits without leading zero -->
 		<xsl:when test="$string = 'N'">
 			<xsl:value-of select="format-number($month, '#0')"/>
 		</xsl:when>
-		
+
 		<!-- Month in digits with leading zero -->
 		<xsl:when test="$string = 'n'">
 			<xsl:value-of select="format-number($month, '00')"/>
@@ -253,22 +253,22 @@
 				</xsl:choose>
 			</sup>
 		</xsl:when>
-		
+
 		<!-- Day in digits with leading zero, e. g. 01, 09, 12, 25 -->
 		<xsl:when test="$string = 'd'">
 			<xsl:value-of select="format-number($day, '00')" />
 		</xsl:when>
-		
+
 		<!-- Day in digits with no leading zero, e. g. 1, 9, 12, 25 -->
 		<xsl:when test="$string = 'x'">
 			<xsl:value-of select="format-number($day, '#0')" />
 		</xsl:when>
-		
+
 		<!-- Time in 24-hours, e. g. 18:30 -->
 		<xsl:when test="$string = 'T'">
 			<xsl:value-of select="$time" />
 		</xsl:when>
-		
+
 		<!-- Time in 12-hours, e. g. 6:30pm -->
 		<xsl:when test="$string = 't'">
 			<xsl:variable name="hour" select="substring($time, 1, 2)" />
@@ -283,39 +283,39 @@
 				<xsl:otherwise>pm</xsl:otherwise>
 			</xsl:choose>
 		</xsl:when>
-		
+
 		<!-- Time in 24-hours with no leading zero, e. g. 4:25 -->
 		<xsl:when test="$string = 'h'">
 			<xsl:value-of select="format-number(substring-before($time, ':'), '#0')" />
 			<xsl:value-of select="substring($time, 3)" />
 		</xsl:when>
-		
+
 		<!-- Weekday as a full word, e. g. Monday, Tuesday -->
 		<xsl:when test="$string = 'W'">
 			<xsl:value-of select="$dictionary/weekdays/day[@id = $weekday]" />
 		</xsl:when>
-		
+
 		<!-- Weekday in 3 letters, e. g. Mon, Tue, Wed -->
 		<xsl:when test="$string = 'w'">
 			<xsl:value-of select="$dictionary/weekdays/day[@id = $weekday]/@abbr" />
 		</xsl:when>
-		
+
 		<!-- Non-breaking space -->
 		<xsl:when test="$string = '_'">
 			<xsl:text>&#160;</xsl:text>
 		</xsl:when>
-		
+
 		<!-- Escaped letter -->
 		<xsl:when test="$string = '\'">
 			<xsl:value-of select="substring($format, 2, 1)" />
 		</xsl:when>
-		
+
 		<!-- Letter -->
 		<xsl:otherwise>
 			<xsl:value-of select="$string" />
 		</xsl:otherwise>
 	</xsl:choose>
-	
+
 	<!-- Get offset -->
 	<xsl:variable name="offset">
 		<xsl:choose>
@@ -340,23 +340,23 @@
 
 <!--
 	COMPARE DATES
-	
+
 	# Example usage
-	
+
 		<xsl:call-template name="compare-dates">
 			<xsl:with-param name="first" select="'1980-07-17'" />
 			<xsl:with-param name="second" select="'1983-07-21'" />
 			<xsl:with-param name="is" select="'<'" />
 		</xsl:call-template>
-	
+
 	# Required Parameters:
 
 	- first:             First date, formatted as YYYY-MM-DD
 	- second:            Second date, formatted as YYYY-MM-DD
 	- is:                Operator, defaults to '='
-	
+
 	# Optional Parameters:
-	
+
 	- first-time:        Time of the first date
 	- second-time:       Time of the second date
 -->
@@ -366,10 +366,10 @@
 	<xsl:param name="first-time" />
 	<xsl:param name="second-time" />
 	<xsl:param name="is" select="'='" />
-	
+
 	<xsl:variable name="first-stamp" select="concat(translate($first, '-', ''), translate($first-time, ':', ''))" />
 	<xsl:variable name="second-stamp" select="concat(translate($second, '-', ''), translate($second-time, ':', ''))" />
-	
+
 	<xsl:choose>
 		<xsl:when test="$is = 'earlier than' or $is = '&lt;'">
 			<xsl:value-of select="boolean($first-stamp &lt; $second-stamp)" />
@@ -391,23 +391,23 @@
 
 <!--
 	DATE IN RANGE
-	
+
 	# Example usage
-	
+
 		<xsl:call-template name="date-in-range">
 			<xsl:with-param name="date" select="'1983-07-21'" />
 			<xsl:with-param name="start" select="'1980-07-17'" />
 			<xsl:with-param name="end" select="'2012-08-04'" />
 		</xsl:call-template>
-	
+
 	# Required Parameters:
 
 	- date:              Date to check, formatted as YYYY-MM-DD
 	- start:             Start date of range, formatted as YYYY-MM-DD
 	- end:               End date of range, formatted as YYYY-MM-DD
-	
+
 	# Optional Parameters:
-	
+
 	- date-time:         Time of the date to check
 	- start-time:        Start time of the range
 	- end-time:          End time of the range
@@ -419,11 +419,11 @@
 	<xsl:param name="date-time" />
 	<xsl:param name="start-time" />
 	<xsl:param name="end-time" />
-	
+
 	<xsl:variable name="date-stamp" select="concat(translate($date, '-', ''), translate($date-time, ':', ''))" />
 	<xsl:variable name="start-stamp" select="concat(translate($start, '-', ''), translate($start-time, ':', ''))" />
 	<xsl:variable name="end-stamp" select="concat(translate($end, '-', ''), translate($end-time, ':', ''))" />
-	
+
 	<xsl:value-of select="boolean($date-stamp &gt;= $start-stamp and $date-stamp &lt;= $end-stamp)" />
 </xsl:template>
 

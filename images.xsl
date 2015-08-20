@@ -3,13 +3,13 @@
 
 <!--
 	RESIZE IMAGES
-	
+
 	- Author: Nils Hörrmann <http://nilshoerrmann.de>
 	- Version: 2.2
 	- Release date: 2nd January 2012
-	
+
 	# Example usage
-	
+
 		<xsl:call-template name="image">
 			<xsl:with-param name="image" select="image" />
 			<xsl:with-param name="mode" select="2" />
@@ -17,9 +17,9 @@
 			<xsl:with-param name="height" select="50" />
 			<xsl:with-param name="link" select="true()" />
 		</xsl:call-template>
-							
+
 	# Options
-	
+
 	- image:             A Symphony image node containing image path,
 	                     filename and meta information
 	- mode:              Resize mode, either nummeric or string
@@ -35,39 +35,39 @@
 	- alt:               Optional alternative text, string
 	- title:             Optional title, string
 	- class:             Optional class name, string
-	
+
 	# Notes
-	
+
 	This template will add the original dimensions as data attribute, e. g.
-	
+
 		data-width="615" data-height="250"
-	
+
 	This can be used as object for futher JavaScript processing when
 	generating an image gallery.
-	
+
 	If either width or height of the resized image are missing, these values are automatically calculated based on the original dimensions.
-	
+
 	# Limitations
-	
+
 	This template currently does not support external images.
-	
+
 	# Change log
-	
+
 	## Version 2.2
-	
+
 	- Add new template for URL generation
-	
+
 	## Version 2.1
-	
+
 	- Remove modes on named templates
-	
+
 	## Version 2.0
-	
+
 	- Store orinigal width and height in data attributes
 	- Add custom alt attributes
-	
+
 	## Version 1.1
-	
+
 	- Initial release
 -->
 <xsl:template name="image">
@@ -81,12 +81,12 @@
 	<xsl:param name="alt" />
 	<xsl:param name="title" />
 	<xsl:param name="class" />
-	
+
 	<!-- Get Image -->
 	<xsl:if test="$image != ''">
 		<xsl:variable name="resized-image">
 			<xsl:choose>
-			
+
 				<!-- Resize -->
 				<xsl:when test="$mode = 'resize' or $mode = 1">
 					<xsl:call-template name="jit-resize">
@@ -99,7 +99,7 @@
 						<xsl:with-param name="class" select="$class" />
 					</xsl:call-template>
 				</xsl:when>
-				
+
 				<!-- Crop to fill -->
 				<xsl:when test="$mode = 'crop' or $mode = 2">
 					<xsl:call-template name="jit-resize">
@@ -112,9 +112,9 @@
 						<xsl:with-param name="title" select="$title" />
 						<xsl:with-param name="class" select="$class" />
 					</xsl:call-template>
-				
+
 				</xsl:when>
-				
+
 				<!-- Resize canvas -->
 				<xsl:when test="$mode = 'resize-crop' or $mode = 3">
 					<xsl:call-template name="jit-resize">
@@ -129,7 +129,7 @@
 						<xsl:with-param name="class" select="$class" />
 					</xsl:call-template>
 				</xsl:when>
-				
+
 				<!-- Direct display -->
 				<xsl:otherwise>
 					<xsl:call-template name="jit-resize">
@@ -142,7 +142,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		
+
 		<!-- Link image -->
 		<xsl:choose>
 			<xsl:when test="$link != false()">
@@ -170,16 +170,16 @@
 	<xsl:param name="alt" />
 	<xsl:param name="title" />
 	<xsl:param name="class" />
-	
+
 	<!-- Get Width -->
 	<xsl:variable name="jit-width">
 		<xsl:choose>
-			
+
 			<!-- Keep width -->
 			<xsl:when test="$width != 0">
 				<xsl:value-of select="$width" />
 			</xsl:when>
-			
+
 			<!-- Calculate with -->
 			<xsl:when test="$image/meta/@width and $image/meta/@height">
 				<xsl:call-template name="jit-calculate-dimension">
@@ -193,16 +193,16 @@
 			<xsl:otherwise>0</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	
+
 	<!-- Get Height -->
 	<xsl:variable name="jit-height">
 		<xsl:choose>
-			
+
 			<!-- Keep height -->
 			<xsl:when test="$height != 0">
 				<xsl:value-of select="$height" />
 			</xsl:when>
-			
+
 			<!-- Calculate height -->
 			<xsl:when test="$image/meta/@width and $image/meta/@height">
 				<xsl:call-template name="jit-calculate-dimension">
@@ -216,54 +216,54 @@
 			<xsl:otherwise>0</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	
+
 	<!-- Resized image -->
 	<img data-width="{$image/meta/@width}" data-height="{$image/meta/@height}">
-		
+
 		<!-- Title -->
 		<xsl:if test="$title != ''">
 			<xsl:attribute name="title">
 				<xsl:value-of select="$title"/>
 			</xsl:attribute>
 		</xsl:if>
-		
+
 		<!-- Alternative text -->
 		<xsl:if test="$alt != ''">
 			<xsl:attribute name="alt">
 				<xsl:value-of select="$alt"/>
 			</xsl:attribute>
 		</xsl:if>
-	
+
 		<!-- Set width -->
 		<xsl:if test="$jit-width != 0 and $jit-width != '' and $jit-width != 'NaN'">
 			<xsl:attribute name="width">
 				<xsl:value-of select="$jit-width" />
 			</xsl:attribute>
 		</xsl:if>
-		
+
 		<!-- Set height -->
 		<xsl:if test="$jit-height != 0 and $jit-height != '' and $jit-height != 'NaN'">
 			<xsl:attribute name="height">
 				<xsl:value-of select="$jit-height" />
 			</xsl:attribute>
 		</xsl:if>
-		
+
 		<!-- Set title -->
 		<xsl:if test="$title != ''">
 			<xsl:attribute name="title">
 				<xsl:value-of select="$title" />
 			</xsl:attribute>
 		</xsl:if>
-	
+
 		<!-- Set source -->
 		<xsl:attribute name="src">
 			<xsl:choose>
-			
+
 				<!-- Original image -->
 				<xsl:when test="$jit-width = $image/meta/@width and $jit-height = $image/meta/@height">
 					<xsl:value-of select="concat($root, '/workspace', $image/@path, '/', $image/filename)" />
 				</xsl:when>
-				
+
 				<!-- Resized image -->
 				<xsl:otherwise>
 					<xsl:call-template name="jit-url">
@@ -277,7 +277,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:attribute>
-		
+
 		<!-- Set class -->
 		<xsl:if test="$class != ''">
 			<xsl:attribute name="class">
@@ -298,15 +298,15 @@
 
 	<!-- Root -->
 	<xsl:value-of select="$root" />
-	
+
 	<!-- Settings -->
 	<xsl:choose>
-	
+
 		<!-- Resize -->
 		<xsl:when test="$mode = 1">
 			<xsl:value-of select="concat('/image/1/', $width, '/', $height)" />
 		</xsl:when>
-		
+
 		<!-- Crop to fill -->
 		<xsl:when test="$mode = 2">
 			<xsl:value-of select="concat('/image/2/', $width, '/', $height, '/', $position)" />
@@ -315,7 +315,7 @@
 				<xsl:value-of select="$background-color" />
 			</xsl:if>
 		</xsl:when>
-		
+
 		<!-- Resize canvas -->
 		<xsl:when test="$mode = 3">
 			<xsl:value-of select="concat('/image/3/', $width, '/', $height, '/', $position)" />
@@ -327,18 +327,18 @@
 				<xsl:otherwise>fff</xsl:otherwise>
 			</xsl:choose>
 		</xsl:when>
-		
+
 		<!-- Direct display -->
 		<xsl:otherwise>
 			<xsl:text>/workspace/</xsl:text>
 		</xsl:otherwise>
-	
+
 	</xsl:choose>
-	
+
 	<!-- Path -->
 	<xsl:value-of select="$image/@path" />
 	<xsl:text>/</xsl:text>
-	
+
 	<!-- Filename -->
 	<xsl:value-of select="$image/filename" />
 </xsl:template>

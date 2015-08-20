@@ -12,7 +12,7 @@
 	<xsl:param name="format" select="'M D, Y'" />
 	<xsl:param name="replies" select="true()" />
 	<xsl:param name="max" select="10" />
-	
+
 	<!-- Set quotes -->
 	<xsl:variable name="opening-quote">
 		<xsl:choose>
@@ -26,10 +26,10 @@
 			<xsl:otherwise>&#8221;</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	
+
 	<!-- Tweets -->
 	<xsl:choose>
-		
+
 		<!-- Include replies -->
 		<xsl:when test="$replies = true()">
 			<xsl:apply-templates select="status[position() &lt;= $max]" mode="twitter">
@@ -39,7 +39,7 @@
 				<xsl:with-param name="closing-quote" select="$closing-quote" />
 			</xsl:apply-templates>
 		</xsl:when>
-		
+
 		<!-- Exclude replies -->
 		<xsl:otherwise>
 			<xsl:apply-templates select="status[not(starts-with(text, '@'))][position() &lt;= $max]" mode="twitter">
@@ -77,11 +77,11 @@
 	<xsl:param name="closing-quote" />
 
 	<xsl:choose>
-	
+
 		<!-- Retweet -->
 		<xsl:when test="retweeted_status/*">
 			<xsl:attribute name="class">retweet</xsl:attribute>
-			
+
 			<blockquote cite="https://twitter.com/{retweeted_status/user/screen_name}/status/{retweeted_status/id}">
 				<xsl:apply-templates select="str:tokenize(retweeted_status/text,' ')" mode="tweet">
 					<xsl:with-param name="tweet" select="." />
@@ -89,7 +89,7 @@
 					<xsl:with-param name="closing-quote" select="$closing-quote" />
 				</xsl:apply-templates>
 			</blockquote>
-			
+
 			<!-- Reference -->
 			<footer>
 				<a href="https://twitter.com/{retweeted_status/user/screen_name}/status/{retweeted_status/id}" title="{retweeted_status/user/name}, @{retweeted_status/user/screen_name}">
@@ -103,7 +103,7 @@
 				</a>
 			</footer>
 		</xsl:when>
-		
+
 		<!-- Original Tweet -->
 		<xsl:otherwise>
 			<p>
@@ -111,7 +111,7 @@
 					<xsl:with-param name="tweet" select="." />
 				</xsl:apply-templates>
 			</p>
-				
+
 			<!-- Reference -->
 			<footer>
 				<a href="https://twitter.com/{user/screen_name}/status/{id}" title="{user/name}, @{user/screen_name}">
@@ -130,7 +130,7 @@
 <xsl:template match="token" mode="tweet">
 	<xsl:param name="opening-quote" />
 	<xsl:param name="closing-quote" />
-	
+
 	<!-- Opening quotes -->
 	<xsl:variable name="quote-start">
 		<xsl:choose>
@@ -143,7 +143,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	
+
 	<!-- Closing quotes -->
 	<xsl:variable name="quote-end">
 		<xsl:choose>
@@ -165,7 +165,7 @@
 <!-- Username -->
 <xsl:template match="token[starts-with(., '@')]" mode="tweet" priority="1">
 	<xsl:param name="tweet" />
-	
+
 	<!-- Extract username -->
 	<xsl:variable name="name">
 		<xsl:call-template name="plain">
@@ -176,7 +176,7 @@
 
 	<!-- Link user -->
 	<xsl:choose>
-	
+
 		<!-- User name not found -->
 		<xsl:when test="count($user) = 0">
 			<a href="https://twitter.com/{$name}" title="{$name}" class="username">
@@ -184,7 +184,7 @@
 				<xsl:value-of select="$name" />
 			</a>
 		</xsl:when>
-		
+
 		<!-- Existing user -->
 		<xsl:otherwise>
 			<a href="https://twitter.com/{$user/screen_name}" title="{$user/name}" class="username">
@@ -193,7 +193,7 @@
 			</a>
 		</xsl:otherwise>
 	</xsl:choose>
-	
+
 	<!-- Add remaining string -->
 	<xsl:value-of select="substring-after(current(), $name)"/>
 	<xsl:text> </xsl:text>
@@ -202,7 +202,7 @@
 <!-- Hashtag -->
 <xsl:template match="token[starts-with(., '#')]" mode="tweet" priority="1">
 	<xsl:param name="tweet" />
-	
+
 	<!-- Get plain tag -->
 	<xsl:variable name="tag">
 		<xsl:call-template name="plain">
@@ -215,7 +215,7 @@
 		<em>#</em>
 		<xsl:value-of select="$tag" />
 	</a>
-	
+
 	<!-- Add remaining string -->
 	<xsl:value-of select="substring-after(current(), $tag)"/>
 	<xsl:text> </xsl:text>
@@ -228,7 +228,7 @@
 	<xsl:variable name="url-mix" select="$tweet//*[starts-with(current(), url)]" />
 
 	<xsl:choose>
-		
+
 		<!-- URL found -->
 		<xsl:when test="url">
 			<a href="{$url/expanded_url}">
@@ -241,7 +241,7 @@
 			</a>
 			<xsl:value-of select="substring-after(., $url-mix/url)" />
 		</xsl:when>
-		
+
 		<!-- URL not found -->
 		<xsl:otherwise>
 			<a href="{.}">

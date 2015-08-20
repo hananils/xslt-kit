@@ -3,13 +3,13 @@
 
 <!--
 	TIME RANGE
-	
+
 	- Author: Nils Hörrmann <http://nilshoerrmann.de>
 	- Version: 1.0
 	- Release date: 31st October 2011
-	
+
 	# Example usage
-	
+
 		<xsl:call-template name="timerange">
 			<xsl:with-param name="start" select="date/start" />
 			<xsl:with-param name="end" select="date/end" />
@@ -22,7 +22,7 @@
    	- end:              The end date as a Symphony date node
 
 	# Optional Parameters:
-	
+
 	- show-time:        Show time, either true() or false(), defaults to true()
 	- lang:             The language used, either 'en' or 'de' (default)
 	- dateformat-long   Date format containing date and time
@@ -31,19 +31,19 @@
 	- time-separator
 	- datetime-separator
 	- timeformat
-	
+
 	# Requirements
-	
+
 	kit/datetime.xsl
-	
+
 	# Change Log
-	
+
 	## Version 1.1
-	
+
 	- Added non-breaking space for German times
-	
+
 	## Version 1.0
-	
+
 	- Initial release
 -->
 
@@ -58,10 +58,10 @@
 	<xsl:param name="time-separator" />
 	<xsl:param name="datetime-separator" />
 	<xsl:param name="timeformat" />
-	
+
 	<!-- Format times -->
 	<xsl:choose>
-	
+
 		<!-- Process given times -->
 		<xsl:when test="$dateformat-long != '' and $dateformat-short != '' and ($show-time = false() or $timeformat !='')">
 			<xsl:call-template name="time-formatter">
@@ -113,7 +113,7 @@
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
-	
+
 <xsl:template name="time-formatter">
 	<xsl:param name="start" />
 	<xsl:param name="end" />
@@ -131,14 +131,14 @@
 
 		<!-- Same day -->
 		<xsl:when test="$start = $end or not($end)">
-	
+
 			<!-- Start date -->
 			<xsl:call-template name="datetime">
 				<xsl:with-param name="date" select="$start" />
 				<xsl:with-param name="format" select="$dateformat-long" />
 				<xsl:with-param name="lang" select="$lang" />
 			</xsl:call-template>
-			
+
 			<!-- Time -->
 			<xsl:if test="$start/@time != '00:00' and $show-time = true()">
 				<xsl:value-of select="$datetime-separator" />
@@ -157,17 +157,17 @@
 				</xsl:if>
 			</xsl:if>
 		</xsl:when>
-		
+
 		<!-- Different day -->
 		<xsl:otherwise>
-	
+
 			<!-- Start date -->
 			<xsl:call-template name="datetime">
 				<xsl:with-param name="date" select="$start" />
 				<xsl:with-param name="format" select="$dateformat-long" />
 				<xsl:with-param name="lang" select="$lang" />
 			</xsl:call-template>
-			
+
 			<!-- Start time -->
 			<xsl:if test="$start/@time != '00:00' and $show-time = true()">
 				<xsl:value-of select="$datetime-separator" />
@@ -177,7 +177,7 @@
 					<xsl:with-param name="lang" select="$lang" />
 				</xsl:call-template>
 			</xsl:if>
-			
+
 			<!-- End date -->
 			<xsl:if test="$end">
 				<xsl:value-of select="$date-separator" />
@@ -187,7 +187,7 @@
 					<xsl:with-param name="lang" select="$lang" />
 				</xsl:call-template>
 			</xsl:if>
-			
+
 			<!-- End time -->
 			<xsl:if test="$end/@time != '00:00' and $show-time = true()">
 				<xsl:value-of select="$datetime-separator" />
@@ -219,7 +219,7 @@
 	<xsl:param name="timeformat" />
 
 	<xsl:for-each select="$ranges">
-		
+
 		<!-- Connect names -->
 		<xsl:choose>
 			<xsl:when test="position() != 1 and position() != last()">
@@ -229,7 +229,7 @@
 				<xsl:value-of select="$last" />
 			</xsl:when>
 		</xsl:choose>
-		
+
 		<!-- Format name -->
 		<xsl:call-template name="timerange">
 			<xsl:with-param name="start" select="current()/start" />
@@ -247,4 +247,3 @@
 </xsl:template>
 
 </xsl:stylesheet>
-	

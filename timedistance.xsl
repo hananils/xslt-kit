@@ -3,13 +3,13 @@
 
 <!--
 	TIME DISTANCE
-	
+
 	- Author: Nils Hörrmann <http://nilshoerrmann.de>
 	- Version: 1.0
 	- Release date: 7th June 2012
-	
+
 	# Example usage
-	
+
 		<xsl:call-template name="timedistance">
 			<xsl:with-param name="start" select="'2011-07-17'" />
 			<xsl:with-param name="end" select="'2011-08-04'" />
@@ -21,7 +21,7 @@
 	- end:              End date as string, formatted as YYYY-MM-DD
 
 	# Optional Parameters:
-	
+
 	- start-time        Start time as string, formatted as hh:mm
 	- end-time          End time as string, formatted as hh:mm
 	- full-time         Display hours and minutes, boolean, defaults to false()
@@ -31,25 +31,25 @@
 	- highlight:        Highlight the numbers, boolean, defaults to false()
 	- connector:        Used to connect values, defaults to ", "
 	- last:             Used to connect the last two values, defaults to "and "
-	
+
 	# Change Log
-	
+
 	## Version 1.3
-	
+
 	- Allow zero numbers
-	
+
 	## Version 1.2
-	
+
 	- Added time calculation (hours and minutes)
-	
+
 	## Version 1.1
-	
+
 	- Added number format
 	- Added highlighting markup
 	- Added configurable connector
-	
+
 	## Version 1.0
-	
+
 	- Initial release
 -->
 
@@ -65,7 +65,7 @@
 	<xsl:param name="highlight" select="false()" />
 	<xsl:param name="connector" select="', '" />
 	<xsl:param name="last" />
-	
+
 	<!-- Default connector -->
 	<xsl:variable name="and">
 		<xsl:choose>
@@ -80,7 +80,7 @@
 	<!-- Get relative time distance -->
 	<xsl:if test="$start != '' and $end != ''">
 		<xsl:choose>
-		
+
 			<!-- Switch dates when end date is prior start date -->
 			<xsl:when test="translate($start, '-', '') &gt; translate($end, '-', '')">
 				<xsl:call-template name="timedistance">
@@ -89,10 +89,10 @@
 					<xsl:with-param name="lang" select="$lang" />
 				</xsl:call-template>
 			</xsl:when>
-			
+
 			<!-- Process dates -->
 			<xsl:otherwise>
-		
+
 				<!-- Language strings -->
 				<xsl:variable name="years">
 					<xsl:choose>
@@ -154,7 +154,7 @@
 						<xsl:otherwise>minute</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
-			
+
 				<!-- Split dates -->
 				<xsl:variable name="start-year" select="number(substring($start, 1, 4))" />
 				<xsl:variable name="start-month" select="number(substring($start, 6, 2))" />
@@ -166,7 +166,7 @@
 				<xsl:variable name="end-day" select="number(substring($end, 9, 2))" />
 				<xsl:variable name="end-hour" select="number(substring-before($end-time, ':'))" />
 				<xsl:variable name="end-minute" select="number(substring-after($end-time, ':'))" />
-				
+
 				<!-- Get year distance -->
 				<xsl:variable name="year-difference" select="$end-year - $start-year" />
 				<xsl:variable name="year-correction">
@@ -176,7 +176,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:variable name="year-distance" select="$year-difference - $year-correction" />
-				
+
 				<!-- Get month distance -->
 				<xsl:variable name="month-difference">
 					<xsl:choose>
@@ -195,18 +195,18 @@
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:variable name="month-distance" select="$month-difference - $month-correction" />
-				
+
 				<!-- Get day distance -->
 				<xsl:variable name="day-difference">
 					<xsl:choose>
 						<xsl:when test="$start-day &gt; $end-day">
 							<xsl:choose>
-							
+
 								<!-- 30 days a month -->
 								<xsl:when test="$start-month = 4 or $start-month = 6 or $start-month = 9 or $start-month = 11">
 									<xsl:value-of select="30 - $start-day + $end-day"/>
 								</xsl:when>
-								
+
 								<!-- February -->
 								<xsl:when test="$start-month = 2">
 									<xsl:choose>
@@ -218,7 +218,7 @@
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:when>
-								
+
 								<!-- 31 days a month -->
 								<xsl:otherwise>
 									<xsl:value-of select="31 - $start-day + $end-day"/>
@@ -237,7 +237,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:variable name="day-distance" select="$day-difference - $day-correction" />
-				
+
 				<!-- Get hour distance -->
 				<xsl:variable name="hour-difference">
 					<xsl:choose>
@@ -256,7 +256,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:variable name="hour-distance" select="$hour-difference - $hour-correction" />
-				
+
 				<!-- Get minute distance -->
 				<xsl:variable name="minute-distance">
 					<xsl:choose>
@@ -268,10 +268,10 @@
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
-				
+
 				<!-- Build result -->
 				<xsl:variable name="result">
-					
+
 					<!-- Years -->
 					<xsl:if test="$year-distance &gt; 0 or contains($show-zero, 'y')">
 						<span class="years">
@@ -287,10 +287,10 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
-					
+
 					<!-- Months -->
 					<xsl:if test="$month-distance &gt; 0 or contains($show-zero, 'm')">
-			
+
 						<!-- Separator -->
 						<xsl:if test="$year-distance != 0 or contains($show-zero, 'y')">
 							<xsl:choose>
@@ -302,7 +302,7 @@
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:if>
-					
+
 						<!-- Months -->
 						<span class="months">
 							<xsl:value-of select="format-number($month-distance, $format)" />
@@ -317,10 +317,10 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
-					
+
 					<!-- Days -->
 					<xsl:if test="$day-distance != 0 or contains($show-zero, 'd')">
-					
+
 						<!-- Separator -->
 						<xsl:if test="$year-distance != 0 or $month-distance != 0 or contains($show-zero, 'y') or contains($show-zero, 'm')">
 							<xsl:choose>
@@ -332,7 +332,7 @@
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:if>
-			
+
 						<!-- Days -->
 						<span class="days">
 							<xsl:value-of select="format-number($day-distance, $format)" />
@@ -347,10 +347,10 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
-									
+
 					<!-- Hours -->
 					<xsl:if test="$start-hour != -1">
-					
+
 						<!-- Separator -->
 						<xsl:if test="$year-distance != 0 or $month-distance != 0 or $day-distance != 0 or contains($show-zero, 'y') or contains($show-zero, 'm') or contains($show-zero, 'd')">
 							<xsl:choose>
@@ -362,7 +362,7 @@
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:if>
-			
+
 						<!-- Hours -->
 						<span class="hours">
 							<xsl:value-of select="format-number($hour-distance, $format)" />
@@ -377,13 +377,13 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
-									
+
 					<!-- Minutes -->
 					<xsl:if test="$start-hour != -1 and $full-time = true()">
-					
+
 						<!-- Separator -->
 						<xsl:value-of select="$and" />
-			
+
 						<!-- Minutes -->
 						<span class="minutes">
 							<xsl:value-of select="format-number($minute-distance, $format)" />
@@ -399,7 +399,7 @@
 						</xsl:choose>
 					</xsl:if>
 				</xsl:variable>
-				
+
 				<!-- Return result -->
 				<xsl:choose>
 					<xsl:when test="$highlight = false()">

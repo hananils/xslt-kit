@@ -3,53 +3,53 @@
 
 <!--
 	DATA SOURCE PAGINATION
-	
+
 	- Author: Nils Hörrmann <http://nilshoerrmann.de> based on a utility by Nick Dunn <http://nick-dunn.co.uk>
 	- Version: 2.1
 	- Release date: 13th December 2011
-	
+
 	# Example usage
-	
+
 		<xsl:call-template name="pagination">
 			<xsl:with-param name="pagination" select="articles/pagination" />
 			<xsl:with-param name="pagination-url" select="concat($root, '/', $root-page, '/?page=$')" />
 		</xsl:call-template>
 
 	# Required Parameters
-	
+
 	- pagination:        XPath to the data source pagination element
 	- pagination-url:    URL used for page links, use $ as placeholder for the page number
-	
+
 	# Optional Parameters
-	
+
 	- show-range:        Number of pages until the list gets shortened, defaults to 5
 	- show-navigation:   Show previous or next links, defaults to true()
 	- show-rotation:     Add rotation to next and previous links, defaults to false()
 	- label-next:        Custom "Next" label text
 	- label-previous:    Custom "Previous" label text
-	
+
 	# Class options:
-	
+
 	- class-pagination:  Class used for the pagination list
 	- class-next:        Class used for the next page link
 	- class-previous:    Class used for the previous page link
 	- class-selected:    Class used for the selected page
 	- class-disabled:    Class used for the disabled page link
-	
+
 	# Change log
-	
+
 	## Version 2.1
-	
+
 	- Consistent naming of internal templates
 
 	## Version 2.0
-	
+
 	- HTML5 based markup, switched from <ul /> to <nav />
 	- Removed option `$class-page`
 	- Changed default classes for navigation to `prev` and `next`
-	
+
 	## Version 1.0
-	
+
 	- Initial release
 -->
 
@@ -83,7 +83,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		
+
 		<!-- Current page -->
 		<xsl:variable name="page-current">
 			<xsl:choose>
@@ -91,7 +91,7 @@
 				<xsl:otherwise><xsl:value-of select="$pagination/@current-page" /></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-	
+
 		<!-- Previous page -->
 		<xsl:variable name="page-previous">
 			<xsl:choose>
@@ -99,7 +99,7 @@
 				<xsl:otherwise><xsl:value-of select="$page-current - 1" /></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		
+
 		<!-- Next page -->
 		<xsl:variable name="page-next">
 			<xsl:choose>
@@ -107,7 +107,7 @@
 				<xsl:otherwise><xsl:value-of select="$page-current + 1" /></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		
+
 		<!-- Last range of page number -->
 		<xsl:variable name="range-last">
 			<xsl:value-of select="$pagination/@total-pages - $range + 1" />
@@ -132,10 +132,10 @@
 		<xsl:variable name="page-last">
 			<xsl:value-of select="$page-first + $range - 1" />
 		</xsl:variable>
-		
+
 		<!-- Pagination -->
 		<nav class="{$class-pagination}">
-		
+
 			<!-- Previous link -->
 			<xsl:if test="$show-navigation = true()">
 				<xsl:call-template name="pagination-navigation">
@@ -148,7 +148,7 @@
 					<xsl:with-param name="label" select="$label-previous" />
 				</xsl:call-template>
 			</xsl:if>
-			
+
 			<!-- Page range -->
 			<xsl:call-template name="pagination-numbers">
 				<xsl:with-param name="pagination-url" select="$pagination-url" />
@@ -160,7 +160,7 @@
 				<xsl:with-param name="class-elipsis" select="$class-elipsis" />
 				<xsl:with-param name="iterations" select="$page-last - $page-first" />
 			</xsl:call-template>
-			
+
 			<!-- Next link -->
 			<xsl:if test="$show-navigation = true()">
 				<xsl:call-template name="pagination-navigation">
@@ -191,7 +191,7 @@
 
 	<!-- Relative page link -->
 	<a>
-	
+
 		<!-- Class -->
 		<xsl:attribute name="class">
 			<xsl:value-of select="$class" />
@@ -200,7 +200,7 @@
 				<xsl:value-of select="$class-disabled" />
 			</xsl:if>
 		</xsl:attribute>
-		
+
 		<!-- Link -->
 		<xsl:if test="$link">
 			<xsl:attribute name="href">
@@ -230,9 +230,9 @@
 	<xsl:param name="class-elipsis" />
 	<xsl:param name="iterations" />
 
-	<!-- Page number  -->	
+	<!-- Page number  -->
 	<xsl:variable name="page" select="$page-last - $iterations" />
-		
+
 	<!-- Generate ellipsis at the beginning -->
 	<xsl:if test="$page = $page-first and $page-first &gt; 1">
 		<a>
@@ -247,9 +247,9 @@
 		</a>
 		<xsl:if test="$page != 2">
 			<span class="{$class-elipsis}">&#8230;</span>
-		</xsl:if> 
+		</xsl:if>
 	</xsl:if>
-	
+
 	<!-- Generate page -->
 	<a>
 		<xsl:if test="$page = $page-current">
@@ -266,12 +266,12 @@
 		</xsl:attribute>
 		<xsl:value-of select="$page" />
 	</a>
-	
+
 	<!-- Generate ellipsis at the end -->
 	<xsl:if test="$page = $page-last and $page-last &lt; $page-total">
 		<xsl:if test="$page != ($page-total - 1)">
 			<span class="{$class-elipsis}">&#8230;</span>
-		</xsl:if> 
+		</xsl:if>
 		<a>
 			<xsl:attribute name="href">
 				<xsl:call-template name="pagination-url-replace">
@@ -283,7 +283,7 @@
 			<xsl:value-of select="$page-total" />
 		</a>
 	</xsl:if>
-		
+
 	<!-- Generate next page number -->
 	<xsl:if test="$iterations &gt; 0">
 		<xsl:call-template name="pagination-numbers">
@@ -301,14 +301,14 @@
 
 <!--
 	Page URL
---> 
+-->
 <xsl:template name="pagination-url-replace">
 	<xsl:param name="string" />
 	<xsl:param name="search" />
 	<xsl:param name="replace" />
 
 	<!-- Replace wildcard by page number -->
-	<xsl:value-of select="concat(substring-before($string, $search), $replace, substring-after($string, $search))" />	
+	<xsl:value-of select="concat(substring-before($string, $search), $replace, substring-after($string, $search))" />
 </xsl:template>
 
 
