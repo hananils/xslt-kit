@@ -77,6 +77,7 @@
 	<xsl:param name="height" select="0" />
 	<xsl:param name="position" select="5" />
 	<xsl:param name="background-color" />
+	<xsl:param name="srcset" select="false()" />
 	<xsl:param name="link" select="false()" />
 	<xsl:param name="alt" />
 	<xsl:param name="title" />
@@ -94,6 +95,7 @@
 						<xsl:with-param name="mode" select="1" />
 						<xsl:with-param name="width" select="$width" />
 						<xsl:with-param name="height" select="$height" />
+						<xsl:with-param name="srcset" select="$srcset" />
 						<xsl:with-param name="alt" select="$alt" />
 						<xsl:with-param name="title" select="$title" />
 						<xsl:with-param name="class" select="$class" />
@@ -108,6 +110,8 @@
 						<xsl:with-param name="width" select="$width" />
 						<xsl:with-param name="height" select="$height" />
 						<xsl:with-param name="position" select="$position" />
+						<xsl:with-param name="background-color" select="$background-color" />
+						<xsl:with-param name="srcset" select="$srcset" />
 						<xsl:with-param name="alt" select="$alt" />
 						<xsl:with-param name="title" select="$title" />
 						<xsl:with-param name="class" select="$class" />
@@ -124,6 +128,7 @@
 						<xsl:with-param name="height" select="$height" />
 						<xsl:with-param name="position" select="$position" />
 						<xsl:with-param name="background-color" select="$background-color" />
+						<xsl:with-param name="srcset" select="$srcset" />
 						<xsl:with-param name="alt" select="$alt" />
 						<xsl:with-param name="title" select="$title" />
 						<xsl:with-param name="class" select="$class" />
@@ -167,6 +172,7 @@
 	<xsl:param name="height" />
 	<xsl:param name="position" />
 	<xsl:param name="background-color" />
+	<xsl:param name="srcset" />
 	<xsl:param name="alt" />
 	<xsl:param name="title" />
 	<xsl:param name="class" />
@@ -277,6 +283,30 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:attribute>
+
+		<!-- Set source set -->
+		<xsl:if test="$srcset = true()">
+			<xsl:attribute name="srcset">
+				<xsl:call-template name="jit-url">
+					<xsl:with-param name="image" select="$image" />
+					<xsl:with-param name="mode" select="$mode" />
+					<xsl:with-param name="width" select="$jit-width" />
+					<xsl:with-param name="height" select="$jit-height" />
+					<xsl:with-param name="position" select="$position" />
+					<xsl:with-param name="background-color" select="$background-color" />
+				</xsl:call-template>
+				<xsl:text> 1x,</xsl:text>
+				<xsl:call-template name="jit-url">
+					<xsl:with-param name="image" select="$image" />
+					<xsl:with-param name="mode" select="$mode" />
+					<xsl:with-param name="width" select="$jit-width * 2" />
+					<xsl:with-param name="height" select="$jit-height * 2" />
+					<xsl:with-param name="position" select="$position" />
+					<xsl:with-param name="background-color" select="$background-color" />
+				</xsl:call-template>
+				<xsl:text> 2x</xsl:text>
+			</xsl:attribute>
+		</xsl:if>
 
 		<!-- Set class -->
 		<xsl:if test="$class != ''">
