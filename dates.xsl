@@ -31,7 +31,7 @@
  * - format
  *   The output format, either long, short or numeric, defaults to numeric
  * - zero
- *   Wheather to include a leading zero or not, defaults to false
+ *   Whether to include a leading zero or not, defaults to false
  *
  * # Requirements
  *
