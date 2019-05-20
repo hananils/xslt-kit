@@ -12,8 +12,7 @@
  * Kit: Name
  *
  * This template formats a name from a node containing `firstname`, `lastname`,
- * `prefix`, `title` or `suffix` nodes. A list of names can be generated using
- * the list template.
+ * `prefix`, `title` or `suffix` nodes.
  *
  * # Example usage
  *
