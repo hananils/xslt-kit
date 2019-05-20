@@ -11,3 +11,7 @@ All templates are namespaced, please add the following to your stylesheet:
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:kit="https://hananils.de/xslt/kit">
 ```
+
+## Requirements
+
+The kit requires the EXSLT extension, <http://exslt.org/>.
