@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:kit="https://hananils.de/xslt/kit"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl">
 
@@ -8,6 +9,8 @@
  * hana+nils · Büro für Gestaltung
  * https://hananils.de · buero@hananils.de
 -->
+
+<xsl:include href="languages.xsl" />
 
 <!--
  * Kit: Year Ranges
@@ -19,13 +22,6 @@
  *
  * <xsl:apply-templates select="dates" mode="kit:dates-years" />
 -->
-
-<xsl:variable name="lang-since">
-    <xsl:choose>
-        <xsl:when test="/data/kirby/languages/language[@current = 'true']/@code = 'de'">seit</xsl:when>
-        <xsl:otherwise>since</xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <xsl:template match="*" mode="kit:dates-years">
 
@@ -42,7 +38,7 @@
 
         <!-- Consecutive years until current year -->
         <xsl:when test="$years/item[last()] - $years/item[1] + 1 = count($years/item) and $years/item[last()] = /data/datetime/today/@year">
-            <xsl:value-of select="$lang-since" />
+            <xsl:value-of select="$kit:translate/since" />
             <xsl:text> </xsl:text>
             <xsl:value-of select="$years/item[1]" />
         </xsl:when>
