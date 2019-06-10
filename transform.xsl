@@ -58,7 +58,11 @@
     <xsl:element name="{$name}">
 
         <!-- Set class -->
-        <xsl:apply-templates select="$class" mode="kit:transform-set-class" />
+        <xsl:if test="$class != ''">
+            <xsl:attribute name="class">
+                <xsl:value-of select="$class" />
+            </xsl:attribute>
+        </xsl:if>
 
         <!-- Set prefix -->
         <xsl:if test="position() = 1">
@@ -90,13 +94,6 @@
 <!--
     Utilities
 -->
-
-<!-- Set class attribute -->
-<xsl:template match="text()" mode="kit:transform-set-class">
-    <xsl:attribute name="class">
-        <xsl:value-of select="." />
-    </xsl:attribute>
-</xsl:template>
 
 <!-- Get offset headline -->
 <xsl:template match="*" mode="kit:transform-apply-offset">
